@@ -18,8 +18,8 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place }) 
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const isFormValid = true;
-    // const isFormValid = Object.values(formData).every((v) => v !== "");
+    // const isFormValid = true;
+    const isFormValid = Object.values(formData).every((v) => v !== "");
 
     // "Next" 버튼 클릭 시 App으로 폼 데이터 전달
     const handleNext = () => {
