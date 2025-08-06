@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import intimacyImage from '/src/assets/images/intimacy.png';
 
-function StudyAFreeChatScreen({ onNext, setDemoData }) {
+function StudyAPostChatScreen({ onNext, setDemoData, place }) {
     const [formData, setFormData] = useState({
-        a1: "",
-        a2: "",
-        a3: "",
-        a4: "",
-        a5: "",
-        a6: "",
-        a7: "",
-        a8: "",
-        a9: "",
-        a10: "",
-        a11: "",
-        a12: "",
-        a13: "",
-        a14: "",
-        a15: "",
-        a16: "",
+        [`post_a1_${place}`]: "",
+        [`post_a2_${place}`]: "",
+        [`post_a3_${place}`]: "",
+        [`post_a4_${place}`]: "",
+        [`post_a5_${place}`]: "",
+        [`post_a6_${place}`]: "",
+        [`post_a7_${place}`]: "",
+        [`post_a8_${place}`]: "",
+        [`post_a9_${place}`]: "",
+        [`post_a10_${place}`]: "",
+        [`post_a11_${place}`]: "",
+        [`post_a12_${place}`]: "",
+        [`post_a13_${place}`]: "",
+        [`post_a14_${place}`]: "",
+        [`post_a15_${place}`]: "",
+        [`post_a16_${place}`]: "",
     });
 
     const handleChange = (e) => {
@@ -26,23 +26,7 @@ function StudyAFreeChatScreen({ onNext, setDemoData }) {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const isFormValid =
-        formData.a1 !== "" &&
-        formData.a2 !== "" &&
-        formData.a3 !== "" &&
-        formData.a4 !== "" &&
-        formData.a5 !== "" &&
-        formData.a6 !== "" &&
-        formData.a7 !== "" &&
-        formData.a8 !== "" &&
-        formData.a9 !== "" &&
-        formData.a10 !== "" &&
-        formData.a11 !== "" &&
-        formData.a12 !== "" &&
-        formData.a13 !== "" &&
-        formData.a14 !== "" &&
-        formData.a15 !== "" &&
-        formData.a16 !== "";
+    const isFormValid = Object.values(formData).every((v) => v !== "");
 
     // "Next" 버튼 클릭 시 App으로 폼 데이터 전달
     const handleNext = () => {
@@ -70,14 +54,14 @@ function StudyAFreeChatScreen({ onNext, setDemoData }) {
             }}
         >
             <h2 style={{ textAlign: 'left', color: '#333', borderBottom: '2px solid #ddd', paddingBottom: '10px' }}>
-                1차 실험 설문지 (2/2) 경험 평가
+                1차 실험 설문지 "{place}" (2/2) 경험 평가
             </h2>
 
             <h2 style={{ textAlign: 'left', color: '#333', paddingBottom: '0px' }}>
-                "🗽 단 하루로 완성하는 뉴욕 여행 설계 대화" 에 대한 경험 평가
+                "🗽 단 하루로 완성하는 {place} 여행 설계 대화" 에 대한 경험 평가
             </h2>
             <p style={{ fontSize: '16px', color: '#555', backgroundColor: '#f0f8ff', padding: '20px', borderRadius: '5px', marginTop: '20px' }}>
-                여러분은 방금 친구와 함께 '단 하루로 완성하는 뉴욕 여정 설계" 주제로 여행 계획 대화를 나누었습니다.<br/>
+                여러분은 방금 친구와 함께 '단 하루로 완성하는 {place} 여정 설계" 주제로 여행 계획 대화를 나누었습니다.<br/>
                 이 설문은 그 대화 경험을 바탕으로 당신이 느낀 인식, 감정, 참여 정도를 평가하기 위한 것입니다.
                 <br/><br/>
                 각 문항은 당신의 주관적인 경험에 기반하여 응답해 주세요.<br/>
@@ -87,43 +71,43 @@ function StudyAFreeChatScreen({ onNext, setDemoData }) {
             {/* Questions - A */}
             {[
                 {
-                    key: "a1",
+                    key: `post_a1_${place}`,
                     question: "1. 과제를 수행하는 동안, 상대와 생각이 잘 통했다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: "a2",
+                    key: `post_a2_${place}`,
                     question: "2. 나와 상대는 함께 잘 협업 했다고 느낀다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: "a3",
+                    key: `post_a3_${place}`,
                     question: "3. 이 상호작용에 몰입했다고 생각한다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: "a4",
+                    key: `post_a4_${place}`,
                     question: "4. 나는 대화 내내 상대가 내 곁에 있는 듯 느꼈다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: "a5",
+                    key: `post_a5_${place}`,
                     question: "5. 나는 상대에게 집중해서 주의를 기울였다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: "a6",
+                    key: `post_a6_${place}`,
                     question: "6. 상대도 나에게 집중하고 있다고 느꼈다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: "a7",
+                    key: `post_a7_${place}`,
                     question: [
                         "7. 당신이 커뮤니케이션에서 사용한 매체(gif)는 얼마나 사교적으로 느껴졌나요?",
                         "*각 항목의 양 끝에 제시된 두 표현 사이에서, 당신의 느낌에 가장 가까운 위치에 체크 해주세요",
@@ -133,7 +117,7 @@ function StudyAFreeChatScreen({ onNext, setDemoData }) {
                     labels: ["매우 비사교적 (Unsociable)", "매우 사교적 (Sociable)"],
                 },
                 {
-                    key: "a8",
+                    key: `post_a8_${place}`,
                     question: [
                         "8. 당신이 커뮤니케이션에서 사용한 매체(gif)는 감정이나 반응에 얼마나 민감하게 느껴졌나요?",
                         "*각 항목의 양 끝에 제시된 두 표현 사이에서, 당신의 느낌에 가장 가까운 위치에 체크 해주세요",
@@ -143,7 +127,7 @@ function StudyAFreeChatScreen({ onNext, setDemoData }) {
                     labels: ["매우 둔감함 (Insensitive)", "매우 민감함 (Sensitive)"],
                 },
                 {
-                    key: "a9",
+                    key: `post_a9_${place}`,
                     question: [
                         "9. 당신이 커뮤니케이션에서 사용한 매체(gif)는 얼마나 따뜻한 느낌을 주었나요?",
                         "*각 항목의 양 끝에 제시된 두 표현 사이에서, 당신의 느낌에 가장 가까운 위치에 체크 해주세요",
@@ -153,7 +137,7 @@ function StudyAFreeChatScreen({ onNext, setDemoData }) {
                     labels: ["매우 차가움 (Cold)", "매우 따뜻함 (Warm)"],
                 },
                 {
-                    key: "a10",
+                    key: `post_a10_${place}`,
                     question: [
                         "10. 당신이 커뮤니케이션에서 사용한 매체(gif)는 얼마나 개인적인 느낌을 주었나요?",
                         "*각 항목의 양 끝에 제시된 두 표현 사이에서, 당신의 느낌에 가장 가까운 위치에 체크 해주세요",
@@ -163,7 +147,7 @@ function StudyAFreeChatScreen({ onNext, setDemoData }) {
                     labels: ["매우 차가움 (Cold)", "매우 따뜻함 (Warm)"],
                 },
                 {
-                    key: "a11",
+                    key: `post_a11_${place}`,
                     image: intimacyImage,
                     question: [
                         "11. 이번 상호작용을 통해 당신과 상대방 사이에 얼마나 친밀감이 형성되었다고 느끼십니까?",
@@ -173,31 +157,31 @@ function StudyAFreeChatScreen({ onNext, setDemoData }) {
                     labels: ["", ""],
                 },
                 {
-                    key: "a12",
+                    key: `post_a12_${place}`,
                     question: "12. 나는 상호작용 중에 개인적인 정보를 많이 공유했다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: "a13",
+                    key: `post_a13_${place}`,
                     question: "13. 나는 내 감정이나 생각을 솔직하게 표현했다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: "a14",
+                    key: `post_a14_${place}`,
                     question: "14. 나는 이 상호작용에서 내밀한(사적인) 내용을 포함한 이야기를 했다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: "a15",
+                    key: `post_a15_${place}`,
                     question: "15. 이 상호작용은 즐거웠다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: "a16",
+                    key: `post_a16_${place}`,
                     question: "16. 이번 상호작용 전반에 만족한다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
@@ -272,4 +256,4 @@ function StudyAFreeChatScreen({ onNext, setDemoData }) {
     );
 }
 
-export default StudyAFreeChatScreen;
+export default StudyAPostChatScreen;

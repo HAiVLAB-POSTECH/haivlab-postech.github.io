@@ -29,6 +29,7 @@ function App() {
 
   const [isSending, setIsSending] = useState(false);
   const [userId, setUserId] = useState('');
+  const [knownPeriod, setKnownPeriod] = useState('');
 
   // 6개 이미지 정보 서버로부터 받기
   const [sixImages, setSixImages] = useState(null);
@@ -139,16 +140,50 @@ function App() {
     'https://script.google.com/macros/s/AKfycbzpRzIdfdmr-uah5K6FFAn6Pi-C3dsDB6KB-16bxk7IlykmyznQmWjbEckAQJBYGqUA/exec';
 
   // 화면 전환
+  const startTestA = () => {
+    window.scrollTo(0, 0);
+    if (screen === 'initial') {
+      setScreen('study_a_free_chat');
+    }
+  };
+  const startTestB = () => {
+    window.scrollTo(0, 0);
+    if (screen === 'initial') {
+      setScreen('study_b_emotion_rating');
+    }
+  };
+
+  // place 순서 관리: userId가 짝수면 [뉴욕, 파리], 홀수면 [파리, 뉴욕]
+  const placeOrder = useMemo(() => {
+    if (!userId) return ['뉴욕', '파리'];
+    const lastChar = userId.slice(-1);
+    if (!isNaN(lastChar)) {
+      return parseInt(lastChar) % 2 === 0 ? ['뉴욕', '파리'] : ['파리', '뉴욕'];
+    }
+    return ['뉴욕', '파리'];
+  }, [userId]);
+
+  // study_a_free_chat의 진행 횟수 관리
+  const [freeChatIndex, setFreeChatIndex] = useState(0);
+
+  // 화면 전환 함수 수정
   const changeScreen = () => {
     window.scrollTo(0, 0);
 
     if (screen === 'initial') {
-      // setScreen('study_b_emotion_rating');
       setScreen('study_a_free_chat');
+      setFreeChatIndex(0);
     } else if (screen === 'study_a_free_chat') {
       setScreen('study_a_post_chat');
     } else if (screen === 'study_a_post_chat') {
-      setScreen('study_b_emotion_rating');
+      if (freeChatIndex === 0) {
+        // 첫 번째 free chat 후 두 번째로 이동
+        setFreeChatIndex(1);
+        setScreen('study_a_free_chat');
+      } else {
+        // 두 번째 free chat 후 initial screen으로 이동
+        setScreen('initial');
+      }
     } else if (screen === 'study_b_emotion_rating') {
       setScreen('study_b_receiver');
     } else if (screen === 'study_b_receiver') {
@@ -271,14 +306,16 @@ function App() {
     }
   }
 
-
   return (
     <div className="app-container">
       {screen === 'initial' && (
         <InitialScreen
-          onStart={changeScreen}
+          onStartA={startTestA}
+          onStartB={startTestB}
           userId={userId}
           setUserId={setUserId}
+          knownPeriod={knownPeriod}
+          setKnownPeriod={setKnownPeriod}
         />
       )}
 
@@ -286,6 +323,7 @@ function App() {
         <StudyAFreeChatScreen
           onNext={changeScreen}
           setDemoData={setDemoData}
+          place={placeOrder[freeChatIndex]}
         />
       )}
 
@@ -293,6 +331,7 @@ function App() {
         <StudyAPostChatScreen
           onNext={changeScreen}
           setDemoData={setDemoData}
+          place={placeOrder[freeChatIndex]}
         />
       )}
 
@@ -358,29 +397,6 @@ function App() {
             <AnnotateScreen
               images={imagesToAnnotate}
               onFinish={handleFinish}
-              annotationData={annotationData}
-              setAnnotationData={setAnnotationData}
-            />
-          )}
-        </>
-      )}
-
-      {screen === 'main_study' && (
-        <>
-          {isSending && (
-            <div style={{ textAlign: 'center', margin: '0 auto 20px' }}>
-              <p>Sending Data Now...</p>
-              <progress />
-            </div>
-          )}
-
-          {!isSending && (
-            <MainStudyScreen
-              // images={imagesToAnnotate}
-              // 만약 sixImages가 있으면, 각 객체의 imageName에 ".png"를 붙여 전달합니다.
-              // 나중에 sixImages의 type도 포함해 "img.imageName + img.type + '.png'"로 변경할 수 있습니다.
-              images={mainStudyImages}
-              onFinish={handleFinishMainStudy}
               annotationData={annotationData}
               setAnnotationData={setAnnotationData}
             />

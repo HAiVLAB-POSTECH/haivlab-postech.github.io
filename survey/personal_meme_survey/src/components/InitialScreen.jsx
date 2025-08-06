@@ -1,13 +1,13 @@
 import React from 'react';
 
-function InitialScreen({ onStart, userId, setUserId }) {
+function InitialScreen({ onStartA, onStartB, userId, setUserId, knownPeriod, setKnownPeriod }) {
+  const isButtonDisabled =
+      userId.trim() == "" || knownPeriod == "";
+
   // 입력 변경 시 App.jsx의 userId state를 업데이트
   const handleChange = (e) => {
     setUserId(e.target.value);
   };
-
-  // ID 입력란이 비어있으면 버튼 비활성화
-  const isButtonDisabled = !userId.trim();
 
   return (
     <div
@@ -25,51 +25,7 @@ function InitialScreen({ onStart, userId, setUserId }) {
         📢 설문지
       </h1>
 
-      {/* <h3 style={{ color: '#333', marginTop: '20px' }}>✅ Device Requirement:</h3>
-      <ul style={{ paddingLeft: '20px', color: '#555' }}>
-        <li>You must use a desktop or laptop computer.</li>
-        <li>Smartphones, tablets, and other mobile devices are <strong>NOT</strong> allowed.</li>
-        <li>We will collect your device type (e.g., product name, operating system, screen size).</li>
-        <li>Unauthorized devices will not receive compensation.</li>
-        <li>Screen size must be fixed during the survey. Do not resize the window, zoom in or out, or change your screen settings while participating.</li>
-      </ul>
-
-      <h3 style={{ color: '#333', marginTop: '20px' }}>✅ Response Requirement:</h3>
-      <p style={{ fontSize: '16px', color: '#555', backgroundColor: '#f8f8f8', padding: '10px', borderRadius: '5px' }}>
-        Your open-ended response must be at least <strong>50 characters</strong> long.
-      </p>
-
-      <h2 style={{ color: '#222', marginTop: '30px', borderBottom: '2px solid #ddd', paddingBottom: '10px' }}>
-        ⚠️ CAUTION: Rules & Compensation Policy
-      </h2>
-
-      <h3 style={{ color: '#c00', marginTop: '20px' }}>🚫 Prohibited Actions:</h3>
-      <ul style={{ paddingLeft: '20px', color: '#555' }}>
-        <li>Using the <strong>Back</strong> or <strong>Refresh</strong> buttons in your browser.</li>
-        <li>Opening a new tab or window.</li>
-        <li>Using an unauthorized device (e.g., smartphone, tablet).</li>
-        <li>Resizing your screen or changing display settings during the survey.</li>
-        <li>Quitting the survey before completing all tasks. (If you exit early, your responses will not be collected, and you will not receive compensation.)</li>
-      </ul> */}
-
-      {/* <h3 style={{ color: '#228B22', marginTop: '20px' }}>💰 Compensation Policy</h3>
-
-      <h4 style={{ color: '#d9534f' }}>🔴 No Compensation if:</h4>
-      <ul style={{ paddingLeft: '20px', color: '#555' }}>
-        <li>You violate any prohibited actions listed above.</li>
-      </ul>
-
-      <h4 style={{ color: '#f0ad4e' }}>🟠 Partial / Prorated Compensation if:</h4>
-      <ul style={{ paddingLeft: '20px', color: '#555' }}>
-        <li>You remain idle for too long.</li>
-        <li>Your response contains non-English characters.</li>
-        <li>You submit inappropriate responses (e.g., random characters, irrelevant text).</li>
-      </ul>
-
-      <h4 style={{ color: '#5cb85c' }}>🟢 Full Compensation if:</h4>
-      <ul style={{ paddingLeft: '20px', color: '#555' }}>
-        <li>You complete all tasks without violating any rules above.</li>
-      </ul> */}
+      {/* ... (rest of the commented-out code) ... */}
 
       <p style={{ fontSize: '16px', color: '#555', backgroundColor: '#f0f8ff', padding: '10px', borderRadius: '5px', marginTop: '20px' }}>
         By continuing, you confirm that you have read and agree to the participation and compensation policies.
@@ -85,9 +41,65 @@ function InitialScreen({ onStart, userId, setUserId }) {
         style={{ padding: '8px', fontSize: '14px', marginBottom: '10px' }}
       />
 
-      <div style={{ textAlign: 'center', marginTop: '20px', marginBottom: '50px', paddingBottom: '50px' }}>
-        <button disabled={isButtonDisabled} onClick={onStart}>
-          입력 및 테스트 시작
+      {/* Known period */}
+      <div style={{ marginTop: "20px", color: "#555" }}>
+          <p>Q. 상대방과 알고 지낸 기간은 얼마나 되었나요?</p>
+          {[
+              "6개월 미만",
+              "6개월 이상 1년 미만",
+              "1년 이상 2년 미만",
+              "2년 이상 5년 미만",
+              "5년 이상"
+          ].map((option) => (
+              <div key={option} style={{ marginBottom: "8px" }}>
+                <label>
+                    <input
+                        type="radio"
+                        name="knownPeriod"
+                        value={option}
+                        checked={knownPeriod === option}
+                        onChange={() => setKnownPeriod(option)}
+                    />{" "}
+                    {option}
+                </label>
+              </div>
+          ))}
+      </div>
+
+      <div style={{ textAlign: 'center', marginTop: '20px', paddingBottom: '50px' }}>
+        <button
+          disabled={isButtonDisabled}
+          onClick={onStartA}
+          style={{
+            fontSize: '18px',
+            padding: '14px 32px',
+            margin: '0 10px',
+            border: '2px solid #007bff',
+            borderRadius: '8px',
+            backgroundColor: isButtonDisabled ? '#e0e0e0' : '#007bff',
+            color: isButtonDisabled ? '#888' : '#fff',
+            cursor: isButtonDisabled ? 'not-allowed' : 'pointer',
+            transition: 'background 0.2s, color 0.2s',
+          }}
+        >
+          테스트 A - 자유 대화 시작
+        </button>
+        <button
+          disabled={isButtonDisabled}
+          onClick={onStartB}
+          style={{
+            fontSize: '18px',
+            padding: '14px 32px',
+            margin: '0 10px',
+            border: '2px solid #28a745',
+            borderRadius: '8px',
+            backgroundColor: isButtonDisabled ? '#e0e0e0' : '#28a745',
+            color: isButtonDisabled ? '#888' : '#fff',
+            cursor: isButtonDisabled ? 'not-allowed' : 'pointer',
+            transition: 'background 0.2s, color 0.2s',
+          }}
+        >
+          테스트 B - 감정 평가 시작
         </button>
       </div>
     </div>
