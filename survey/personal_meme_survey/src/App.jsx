@@ -143,8 +143,8 @@ function App() {
     window.scrollTo(0, 0);
 
     if (screen === 'initial') {
-      setScreen('study_b_emotion_rating');
-      // setScreen('study_a_free_chat');
+      // setScreen('study_b_emotion_rating');
+      setScreen('study_a_free_chat');
     } else if (screen === 'study_a_free_chat') {
       setScreen('study_a_post_chat');
     } else if (screen === 'study_a_post_chat') {
