@@ -1,0 +1,10 @@
+/* 전체 화면을 채우면서 Flexbox로 중앙 정렬 */
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto; /* 전체 화면 높이 */
+  width: 100vw;  /* 전체 화면 너비 */
+  text-align: center;
+  /* background-color: #f8f9fa; 배경색 추가 (선택 사항) */
+}
