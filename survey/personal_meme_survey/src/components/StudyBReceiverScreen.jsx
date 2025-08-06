@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import valenceImage from '/src/assets/images/valence_example.png';
 import arousalImage from '/src/assets/images/arousal_example.png';
 
-function StudyBReceiverScreen({ onNext, setDemoData }) {
+function StudyBReceiverScreen({ onNext, emotionData, setEmotionData }) {
 
     // formData keys are dynamic, based on images/questions from server
     const [formData, setFormData] = useState({});
@@ -12,9 +12,15 @@ function StudyBReceiverScreen({ onNext, setDemoData }) {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-
     // "Next" 버튼 클릭 시 App으로 폼 데이터 전달
     const handleNext = () => {
+        if (!isFormValid) return;
+        const updatedData = {
+            ...emotionData,
+            ...formData, // 현재 입력값
+        };
+
+        setEmotionData(updatedData);
         onNext(); 
     };
 
@@ -58,12 +64,12 @@ function StudyBReceiverScreen({ onNext, setDemoData }) {
     const questionKeys = memePairs.flatMap((_, idx) => {
         const i = idx + 1; // 1-based index
         return [
-            `meme_o_${i}_valence`,
-            `meme_o_${i}_arousal`,
-            `meme_o_${i}_expression`,
-            `meme_p_${i}_valence`,
-            `meme_p_${i}_arousal`,
-            `meme_p_${i}_expression`,
+            `recv_meme_o_${i}_valence`,
+            `recv_meme_o_${i}_arousal`,
+            `recv_meme_o_${i}_expression`,
+            `recv_meme_p_${i}_valence`,
+            `recv_meme_p_${i}_arousal`,
+            `recv_meme_p_${i}_expression`,
         ];
     });
 
@@ -103,16 +109,16 @@ function StudyBReceiverScreen({ onNext, setDemoData }) {
                                 아래 gif에 대해 이전에 접한 경험이 있습니까? (복수 선택 가능)
                             </label>
                             {[
-                                { key: "source_1", label: "출처를 알고 있다" },
-                                { key: "source_2", label: "이전에 직접 사용한 적이 있다" },
-                                { key: "source_3", label: "다른 사람이 사용하는 것을 본 적이 있다" },
-                                { key: "source_4", label: "전혀 본 적 없다" },
+                                { key: "known_level_1", label: "출처를 알고 있다" },
+                                { key: "known_level_2", label: "이전에 직접 사용한 적이 있다" },
+                                { key: "known_level_3", label: "다른 사람이 사용하는 것을 본 적이 있다" },
+                                { key: "known_level_4", label: "전혀 본 적 없다" },
                             ].map(({ key, label }) => (
                                 <label key={key} style={{ display: "block", marginBottom: "8px", paddingLeft: "20px" }}>
                                     <input
                                         type="checkbox"
-                                        name={`experience_check_${idx + 1}_${key}`}
-                                        checked={!!formData[`experience_check_${idx + 1}_${key}`]}
+                                        name={`recv_experience_${idx + 1}_${key}`}
+                                        checked={!!formData[`recv_experience_${idx + 1}_${key}`]}
                                         onChange={e => {
                                             const { name, checked } = e.target;
                                             setFormData(prev => ({ ...prev, [name]: checked }));
@@ -125,8 +131,8 @@ function StudyBReceiverScreen({ onNext, setDemoData }) {
                         </div>
                         <div style={{ display: "flex", gap: "40px", justifyContent: "center", alignItems: "flex-start", margin: "30px 0" }}>
                             {[
-                                { img: pair.o, alt: `meme_o_${idx + 1}` },
-                                { img: pair.p, alt: `meme_p_${idx + 1}` }
+                                { img: pair.o, alt: `recv_meme_o_${idx + 1}` },
+                                { img: pair.p, alt: `recv_meme_p_${idx + 1}` }
                             ].map(({ img, alt }) => (
                                 <div key={alt} style={{ flex: 1, background: "#fafafa", borderRadius: "10px", boxShadow: "0 2px 8px #eee", padding: "10px", margin: "0 10px" }}>
                                     <div style={{ display: "flex", justifyContent: "center" }}>

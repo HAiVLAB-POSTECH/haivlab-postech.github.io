@@ -1,16 +1,16 @@
 import React from 'react';
 
-function EndScreen() {
-  const redirectionUrl = "https://app.prolific.com/submissions/complete?cc=C16BCMP9"
+function EndScreen({ sendData }) {
   return (
     <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h1>CONGRATULATIONS! YOU COMPLETED YOUR TASKS.</h1>
-      <p>We will check your response and reward you as we stated in the introduction.
-        It will take no longer than a week.
-      </p>
-      <a href={redirectionUrl} target='_blank' rel='noreferrer'>
-        { redirectionUrl}
-      </a>
+      <h2>테스트가 종료 되었습니다.</h2>
+      <div style={{ textAlign: "center", marginTop: "30px", marginBottom: "50px", paddingBottom: "50px" }}>
+          <button
+              onClick={sendData}
+          >
+          데이터 전송 및 초기 화면으로 돌아가기
+          </button>
+      </div>
     </div>
   );
 }

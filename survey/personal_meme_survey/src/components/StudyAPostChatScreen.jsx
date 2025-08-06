@@ -1,38 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import intimacyImage from '/src/assets/images/intimacy.png';
 
-function StudyAPostChatScreen({ onNext, setDemoData, place }) {
-    const [formData, setFormData] = useState({
-        [`post_a1_${place}`]: "",
-        [`post_a2_${place}`]: "",
-        [`post_a3_${place}`]: "",
-        [`post_a4_${place}`]: "",
-        [`post_a5_${place}`]: "",
-        [`post_a6_${place}`]: "",
-        [`post_a7_${place}`]: "",
-        [`post_a8_${place}`]: "",
-        [`post_a9_${place}`]: "",
-        [`post_a10_${place}`]: "",
-        [`post_a11_${place}`]: "",
-        [`post_a12_${place}`]: "",
-        [`post_a13_${place}`]: "",
-        [`post_a14_${place}`]: "",
-        [`post_a15_${place}`]: "",
-        [`post_a16_${place}`]: "",
-    });
+function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place }) {
+    const [formData, setFormData] = useState({});
+
+    useEffect(() => {
+        const keys = Array.from({ length: 16 }, (_, i) => `post_a${i + 1}_${place}`);
+        const initialData = keys.reduce((acc, key) => {
+            acc[key] = "";
+            return acc;
+        }, {});
+        setFormData(initialData);
+    }, [place]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const isFormValid = Object.values(formData).every((v) => v !== "");
+    const isFormValid = true;
+    // const isFormValid = Object.values(formData).every((v) => v !== "");
 
     // "Next" 버튼 클릭 시 App으로 폼 데이터 전달
     const handleNext = () => {
         if (!isFormValid) return;
-        // App.jsx에서 만들어둔 demoData에 이 값이 저장됨
-        setDemoData(formData);
+        const updatedData = {
+            ...freeChatData,
+            ...formData, // 현재 입력값
+        };
+
+        setFreeChatData(updatedData);
+        console.log("✅ FreeChatData updated:", updatedData);
         onNext(); 
     };
 

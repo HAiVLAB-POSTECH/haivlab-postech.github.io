@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function StudyAFreeChatScreen({ onNext, setDemoData, place }) { // place 추가
+function StudyAFreeChatScreen({ onNext, freeChatData, setFreeChatData, place }) { // place 추가
     const [formData, setFormData] = useState({
         [`pre_a1_${place}`]: "",
         [`pre_a2_${place}`]: "",
@@ -20,7 +20,12 @@ function StudyAFreeChatScreen({ onNext, setDemoData, place }) { // place 추가
     // "Next" 버튼 클릭 시 App으로 폼 데이터 전달
     const handleNext = () => {
         if (!isFormValid) return;
-        setDemoData(formData);
+        const updatedData = {
+            ...freeChatData,
+            ...formData, // 현재 입력값
+        };
+
+        setFreeChatData(updatedData);
         onNext(); 
     };
 
