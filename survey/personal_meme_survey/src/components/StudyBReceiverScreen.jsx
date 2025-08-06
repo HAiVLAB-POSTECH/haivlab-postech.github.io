@@ -95,8 +95,8 @@ function StudyBReceiverScreen({ onNext, setDemoData }) {
                                 <label key={key} style={{ display: "block", marginBottom: "8px", paddingLeft: "20px" }}>
                                     <input
                                         type="checkbox"
-                                        name={key}
-                                        checked={!!formData[key]}
+                                        name={`experience_check_${idx + 1}_${key}`}
+                                        checked={!!formData[`experience_check_${idx + 1}_${key}`]}
                                         onChange={e => {
                                             const { name, checked } = e.target;
                                             setFormData(prev => ({ ...prev, [name]: checked }));
