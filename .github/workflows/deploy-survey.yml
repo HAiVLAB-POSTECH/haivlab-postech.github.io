@@ -1,4 +1,4 @@
-name: Deploy Personal Meme Survey
+name: Deploy Personal Meme Survey to _deploy/
 
 on:
   push:
@@ -30,11 +30,10 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Deploy built files to the repo
+      - name: Deploy to _deploy/
         run: |
-          cp -r dist/* ./
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f *.html assets
-          git commit -m "Deploy personal_meme_survey build [skip ci]" || echo "No changes to commit"
+          git add -f _deploy
+          git commit -m "Deploy personal_meme_survey to _deploy [skip ci]" || echo "No changes to commit"
           git push

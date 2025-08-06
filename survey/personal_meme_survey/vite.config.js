@@ -1,12 +1,12 @@
+// survey/personal_meme_survey/vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
-  base: '/survey/personal_meme_survey/',
+  base: '/survey/personal_meme_survey/', // 경로 유지
   build: {
-    outDir: 'dist',
+    outDir: '_deploy',
     emptyOutDir: true
   },
-  plugins: [react()],
+  plugins: [react()]
 })
