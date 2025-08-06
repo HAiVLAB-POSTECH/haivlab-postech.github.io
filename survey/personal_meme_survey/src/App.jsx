@@ -1,21 +1,17 @@
 import './App.css';
 import React, { useState, useEffect, useMemo } from 'react';
-import StartScreen from './components/StartScreen';
-import AnnotateScreen from './components/AnnotateScreen';
-import EndScreen from './components/EndScreen';
 import InitialScreen from './components/InitialScreen';
 import StudyAFreeChatScreen from './components/StudyAFreeChatScreen';
 import StudyAPostChatScreen from './components/StudyAPostChatScreen';
 import StudyBEmotionRatingScreen from './components/StudyBEmotionRatingScreen';
 import StudyBReceiverScreen from './components/StudyBReceiverScreen';
 import StudyBSenderScreen from './components/StudyBSenderScreen';
-import MainStudyScreen from './components/MainStudyScreen';
 
 function App() {
 
   // 화면 전환 Main Study
   const [screen, setScreen] = useState('initial');  
-  // initial, qualification_test, study_a_free_chat, study_a_post_chat, study_b_emotion_rating, study_b_receiver, study_b_sender, tutorial_intro, tutorial, main_study, end  -- start는 제외
+  // initial, study_a_free_chat, study_a_post_chat, study_b_emotion_rating, study_b_receiver, study_b_sender, end  -- start는 제외
 
   // 데모 설문 데이터 (DemoGraphicSurveyScreen에서 입력한 내용)
   const [demoData, setDemoData] = useState(null);
@@ -189,9 +185,7 @@ function App() {
     } else if (screen === 'study_b_receiver') {
       setScreen('study_b_sender');
     } else if (screen === 'study_b_sender') {
-      setScreen('main_study');
-    } else if (screen === 'start') {
-      setScreen('annotate');
+      setScreen('end');
     }
   };
 
@@ -356,35 +350,7 @@ function App() {
         />
       )}
 
-      {screen === 'demographic_survey' && (
-        // DemoGraphicSurveyScreen에 setDemoData를 넘겨줌
-        <DemoGraphicSurveyScreen
-          onNext={changeScreen}
-          setDemoData={setDemoData}
-          isFetchingImages={isFetchingImages}
-        />
-      )}
-
-      {screen === 'tutorial_intro' && (
-        <TutorialIntroScreen onPracticeStart={changeScreen} />
-      )}
-
-      {screen === 'tutorial' && (
-        <TutorialScreen
-          images={imagesForExamples}
-          onTutorialFinish={changeScreen}
-        />
-      )}
-
-      {screen === 'start' && (
-        <StartScreen
-          onStart={changeScreen}
-          userId={userId}
-          setUserId={setUserId}
-        />
-      )}
-
-      {screen === 'annotate' && (
+      {/* {screen === 'annotate' && (
         <>
           {isSending && (
             <div style={{ textAlign: 'center', margin: '0 auto 20px' }}>
@@ -402,7 +368,7 @@ function App() {
             />
           )}
         </>
-      )}
+      )} */}
 
       {screen === 'end' && <EndScreen />}
     </div>
