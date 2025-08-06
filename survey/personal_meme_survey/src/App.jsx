@@ -28,7 +28,7 @@ function App() {
 
   // 구글 Apps Script URL
   const WEB_APP_URL =
-    'https://script.google.com/macros/s/AKfycbxG_-wOO0gB9Su1trS3KGpVlfmV2gG2oPyqQzOvR7gZ8MC9SXbICgvtJ0eXT50TZXU4fA/exec';
+    'https://script.google.com/macros/s/AKfycbwBMYmbu39lvkhgB1kQY_teKuYWNeaVx90i7HU28eia-jviyv3AhGTcDLuPyS-HEjpV_g/exec';
 
   // 화면 전환
   const startTestA = () => {
@@ -138,7 +138,7 @@ function App() {
       } else {
         console.error("Unknown error:", err);
       }
-      alert('Failed to send data.');
+      // alert('Failed to send data.');
       setIsSending(false);
       setScreen('initial');
     }
