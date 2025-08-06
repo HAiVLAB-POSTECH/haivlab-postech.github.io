@@ -1,0 +1,40 @@
+name: Deploy Personal Meme Survey
+
+on:
+  push:
+    paths:
+      - 'survey/personal_meme_survey/**'
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: survey/personal_meme_survey
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy built files to the repo
+        run: |
+          cp -r dist/* ./
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f *.html assets
+          git commit -m "Deploy personal_meme_survey build [skip ci]" || echo "No changes to commit"
+          git push
