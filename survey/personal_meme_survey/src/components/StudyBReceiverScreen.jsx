@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import valenceImage from '/src/assets/images/valence_example.png';
 import arousalImage from '/src/assets/images/arousal_example.png';
-import memeO1 from '/src/assets/images/meme_o_1.gif';
-import memeO2 from '/src/assets/images/meme_o_2.gif';
-import memeO3 from '/src/assets/images/meme_o_3.gif';
-import memeP1 from '/src/assets/images/meme_p_1.gif';
-import memeP2 from '/src/assets/images/meme_p_2.gif';
-import memeP3 from '/src/assets/images/meme_p_3.gif';
 
 function StudyBReceiverScreen({ onNext, setDemoData }) {
 
@@ -30,28 +24,50 @@ function StudyBReceiverScreen({ onNext, setDemoData }) {
         paddingLeft: "10px",
     };
 
-    // Example: images and their keys would come from props or server
-    // For now, you can pass them as props or fetch and store in state
+    // meme 이미지들을 glob으로 가져오기
+    const memeImages = import.meta.glob('/src/assets/images/meme_*_*.gif', {
+        eager: true,
+        import: 'default',
+        query: '?url',
+    });
 
-    // isFormValid: all keys in questions must have a non-empty value
-    const questionKeys = [
-        "meme_o_1_valence",
-        "meme_o_1_arousal",
-        "meme_o_1_expression",
-        "meme_p_1_valence",
-        "meme_p_1_arousal",
-        "meme_p_1_expression",
-    ]; // Replace with dynamic keys from server
+    // 파일명을 기준으로 meme_o_1 / meme_p_1 형태의 pair 구성
+    const memeMap = Object.entries(memeImages).reduce((acc, [path, url]) => {
+        const filename = path.split('/').pop(); // e.g., meme_o_1.gif
+        if (!filename) return acc;
+
+        const match = filename.match(/meme_(o|p)_(\d+)\.gif/);
+        if (!match) return acc;
+
+        const [_, type, index] = match;
+        const key = `meme_${index}`;
+        if (!acc[key]) acc[key] = {};
+        acc[key][type] = url;
+        return acc;
+    }, {}); // acc type: { [key: string]: { o?: string, p?: string } }
+
+    // meme_o_N, meme_p_N이 모두 존재하는 것만 필터링 후 정렬
+    const memePairs = Object.entries(memeMap)
+        .filter(([_, pair]) => pair.o && pair.p) // 둘 다 있는 것만
+        .sort(([aKey], [bKey]) => parseInt(aKey.split('_')[1]) - parseInt(bKey.split('_')[1]))
+        .map(([_, pair]) => ({
+            o: pair.o,
+            p: pair.p
+    }));
+
+    const questionKeys = memePairs.flatMap((_, idx) => {
+        const i = idx + 1; // 1-based index
+        return [
+            `meme_o_${i}_valence`,
+            `meme_o_${i}_arousal`,
+            `meme_o_${i}_expression`,
+            `meme_p_${i}_valence`,
+            `meme_p_${i}_arousal`,
+            `meme_p_${i}_expression`,
+        ];
+    });
 
     const isFormValid = questionKeys.every((key) => formData[key] && formData[key] !== "");
-
-    // Example: Suppose you want to show N pairs, e.g. 2 pairs for now
-    const memePairs = [
-        { o: memeO1, p: memeP1 },
-        { o: memeO2, p: memeP2 },
-        { o: memeO3, p: memeP3 },
-        // Add more pairs as needed: { o: memeO2, p: memeP2 }, ...
-    ];
 
     return (
         <div
