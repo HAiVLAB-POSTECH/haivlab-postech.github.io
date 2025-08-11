@@ -49,14 +49,39 @@ function App() {
     }
   };
 
-  // place 순서 관리: userId가 짝수면 [뉴욕, 파리], 홀수면 [파리, 뉴욕]
-  const placeOrder = useMemo(() => {
-    if (!userId) return ['뉴욕', '파리'];
-    const lastChar = userId.slice(-1);
-    if (!isNaN(lastChar)) {
-      return parseInt(lastChar) % 2 === 0 ? ['뉴욕', '파리'] : ['파리', '뉴욕'];
+  // 4케이스 세션 구성: userId에 따라 { place, variant } 2개 세션을 생성
+  const sessions = useMemo(() => {
+    const id = parseInt(userId, 10);
+    if (!id || Number.isNaN(id)) {
+      return [
+        { place: '뉴욕', variant: 'orig' },
+        { place: '파리', variant: 'orig' },
+      ];
     }
-    return ['뉴욕', '파리'];
+    const caseIndex = Math.floor(((id - 1) % 8) / 2) + 1; // 1~8 순환, 2명씩 같은 케이스
+    switch (caseIndex) {
+      case 1:
+        return [
+          { place: '뉴욕', variant: 'swap' }, // 얼굴합성
+          { place: '파리', variant: 'orig' },
+        ];
+      case 2:
+        return [
+          { place: '뉴욕', variant: 'orig' },
+          { place: '파리', variant: 'swap' },
+        ];
+      case 3:
+        return [
+          { place: '파리', variant: 'swap' },
+          { place: '뉴욕', variant: 'orig' },
+        ];
+      case 4:
+      default:
+        return [
+          { place: '파리', variant: 'orig' },
+          { place: '뉴욕', variant: 'swap' },
+        ];
+    }
   }, [userId]);
 
   // study_a_free_chat의 진행 횟수 관리
@@ -162,7 +187,8 @@ function App() {
           onNext={changeScreen}
           freeChatData={freeChatData}
           setFreeChatData={setFreeChatData}
-          place={placeOrder[freeChatIndex]}
+          place={sessions[freeChatIndex].place}
+          variant={sessions[freeChatIndex].variant}
         />
       )}
 
@@ -171,7 +197,8 @@ function App() {
           onNext={changeScreen}
           freeChatData={freeChatData}
           setFreeChatData={setFreeChatData}
-          place={placeOrder[freeChatIndex]}
+          place={sessions[freeChatIndex].place}
+          variant={sessions[freeChatIndex].variant}
         />
       )}
 
