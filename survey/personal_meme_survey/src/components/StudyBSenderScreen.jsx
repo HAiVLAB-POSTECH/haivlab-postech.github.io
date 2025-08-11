@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import valenceImage from '/src/assets/images/valence_example.png';
 import arousalImage from '/src/assets/images/arousal_example.png';
 
-function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [] }) {
+function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [], userId }) {
 
     // formData keys are dynamic, based on images/questions from server
     const [formData, setFormData] = useState({});
@@ -20,18 +20,17 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [] })
         query: '?url',
     });
 
-    // 파일명에서 id(m/w 구분 전) 및 role(o/p) 매핑: m→o, w→p
+    // 파일명에서 id 및 role 매핑: _o, _1, _2
     function parseImage(path) {
         const filename = path.split('/').pop() || '';
-        const match = filename.match(/^(.*)_(m|w)\.(gif|webp)$/);
+        const match = filename.match(/^(.*)_(o|1|2)\.(gif|webp)$/);
         if (!match) return null;
         const base = match[1];
-        const mw = match[2];
-        const role = mw === 'm' ? 'o' : 'p';
+        const role = match[2];
         return { id: base, role, url: allImages[path] };
     }
 
-    // id별 o/p 페어 구성
+    // id별 {o,1,2} 매핑
     const pairMap = useMemo(() => {
         const acc = {};
         for (const [path, url] of Object.entries(allImages)) {
@@ -41,26 +40,28 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [] })
             if (!acc[id]) acc[id] = {};
             acc[id][role] = url;
         }
-        return acc; // { angry: {o, p}, ... }
+        return acc; // { angry: {o,1,2}, ... }
     }, []);
+
+    const isOdd = Number.parseInt(userId, 10) % 2 === 1;
+    const rightRole = isOdd ? '1' : '2'; // 발신자: 홀수→_1, 짝수→_2
 
     // 전달받은 items를 pairMap과 결합하여 렌더용 리스트 생성
     const renderList = useMemo(() => {
         return items
             .map(({ id, text }) => ({ id, text, pair: pairMap[id] }))
-            .filter(({ pair }) => pair && pair.o && pair.p);
-    }, [items, pairMap]);
+            .filter(({ pair }) => pair && pair.o && pair[rightRole]);
+    }, [items, pairMap, rightRole]);
 
-    const questionKeys = renderList.flatMap((item, idx) => {
-        const n = idx + 1;
-        return [
-            `send_${item.id}_o_valence`,
-            `send_${item.id}_o_arousal`,
-            `send_${item.id}_o_expression`,
-            `send_${item.id}_p_valence`,
-            `send_${item.id}_p_arousal`,
-            `send_${item.id}_p_expression`,
-        ];
+    const questionKeys = renderList.flatMap((item) => {
+        const roles = ['o', rightRole];
+        return roles.flatMap((r) => (
+            [
+                `send_${item.id}_${r}_valence`,
+                `send_${item.id}_${r}_arousal`,
+                `send_${item.id}_${r}_expression`,
+            ]
+        ));
     });
 
     const isFormValid = questionKeys.every((key) => formData[key] && formData[key] !== "");
@@ -105,7 +106,7 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [] })
             </p>
 
             <div>
-                {renderList.map(({ id, text, pair }, idx) => (
+                {renderList.map(({ id, text, pair }) => (
                     <div key={id} style={{ marginBottom: "40px", borderTop: "1px solid #ddd", paddingBottom: "20px" }}>
                         <div style={{ margin: "30px 0", padding: "20px", background: "#f5f5f5", borderRadius: "8px" }}>
                             <label style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "10px", display: "block" }}>
@@ -135,7 +136,7 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [] })
                         <div style={{ display: "flex", gap: "40px", justifyContent: "center", alignItems: "flex-start", margin: "30px 0" }}>
                             {[
                                 { img: pair.o, alt: `send_${id}_o`, label: '원본(o)' },
-                                { img: pair.p, alt: `send_${id}_p`, label: '얼굴합성(p)' }
+                                { img: pair[rightRole], alt: `send_${id}_${rightRole}`, label: `상대(${rightRole})` }
                             ].map(({ img, alt, label }) => (
                                 <div key={alt} style={{ flex: 1, background: "#fafafa", borderRadius: "10px", boxShadow: "0 2px 8px #eee", padding: "10px", margin: "0 10px" }}>
                                     <div style={{ fontWeight: 600, marginBottom: '8px', textAlign: 'left' }}>Message: {text}</div>

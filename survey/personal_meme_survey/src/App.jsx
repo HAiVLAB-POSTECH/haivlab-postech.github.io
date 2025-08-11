@@ -259,6 +259,7 @@ function App() {
           emotionData={emotionData}
           setEmotionData={setEmotionData}
           items={studyBItems}
+          userId={userId}
         />
       )}
 
@@ -268,6 +269,7 @@ function App() {
           emotionData={emotionData}
           setEmotionData={setEmotionData}
           items={studyBItems}
+          userId={userId}
         />
       )}
 
