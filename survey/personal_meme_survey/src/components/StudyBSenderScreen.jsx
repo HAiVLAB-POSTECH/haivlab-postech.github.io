@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import valenceImage from '/src/assets/images/valence_example.png';
 import arousalImage from '/src/assets/images/arousal_example.png';
 
-function StudyBSenderScreen({ onNext, emotionData, setEmotionData }) {
+function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [] }) {
 
     // formData keys are dynamic, based on images/questions from server
     const [formData, setFormData] = useState({});
@@ -12,6 +12,58 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData }) {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
+
+    // 이미지 로드: gif + webp 모두
+    const allImages = import.meta.glob('/src/assets/**/**.{gif,webp}', {
+        eager: true,
+        import: 'default',
+        query: '?url',
+    });
+
+    // 파일명에서 id(m/w 구분 전) 및 role(o/p) 매핑: m→o, w→p
+    function parseImage(path) {
+        const filename = path.split('/').pop() || '';
+        const match = filename.match(/^(.*)_(m|w)\.(gif|webp)$/);
+        if (!match) return null;
+        const base = match[1];
+        const mw = match[2];
+        const role = mw === 'm' ? 'o' : 'p';
+        return { id: base, role, url: allImages[path] };
+    }
+
+    // id별 o/p 페어 구성
+    const pairMap = useMemo(() => {
+        const acc = {};
+        for (const [path, url] of Object.entries(allImages)) {
+            const parsed = parseImage(path);
+            if (!parsed) continue;
+            const { id, role } = parsed;
+            if (!acc[id]) acc[id] = {};
+            acc[id][role] = url;
+        }
+        return acc; // { angry: {o, p}, ... }
+    }, []);
+
+    // 전달받은 items를 pairMap과 결합하여 렌더용 리스트 생성
+    const renderList = useMemo(() => {
+        return items
+            .map(({ id, text }) => ({ id, text, pair: pairMap[id] }))
+            .filter(({ pair }) => pair && pair.o && pair.p);
+    }, [items, pairMap]);
+
+    const questionKeys = renderList.flatMap((item, idx) => {
+        const n = idx + 1;
+        return [
+            `send_${item.id}_o_valence`,
+            `send_${item.id}_o_arousal`,
+            `send_${item.id}_o_expression`,
+            `send_${item.id}_p_valence`,
+            `send_${item.id}_p_arousal`,
+            `send_${item.id}_p_expression`,
+        ];
+    });
+
+    const isFormValid = questionKeys.every((key) => formData[key] && formData[key] !== "");
 
     // "Next" 버튼 클릭 시 App으로 폼 데이터 전달
     const handleNext = () => {
@@ -25,57 +77,6 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData }) {
         console.log("✅ EmotionData updated:", updatedData);
         onNext(); 
     };
-
-    const labelStyle = {
-        display: "block",
-        marginBottom: "5px",
-        paddingLeft: "10px",
-    };
-
-    // meme 이미지들을 glob으로 가져오기
-    const memeImages = import.meta.glob('/src/assets/images/meme_*_*.gif', {
-        eager: true,
-        import: 'default',
-        query: '?url',
-    });
-
-    // 파일명을 기준으로 meme_o_1 / meme_p_1 형태의 pair 구성
-    const memeMap = Object.entries(memeImages).reduce((acc, [path, url]) => {
-        const filename = path.split('/').pop(); // e.g., meme_o_1.gif
-        if (!filename) return acc;
-
-        const match = filename.match(/meme_(o|p)_(\d+)\.gif/);
-        if (!match) return acc;
-
-        const [_, type, index] = match;
-        const key = `meme_${index}`;
-        if (!acc[key]) acc[key] = {};
-        acc[key][type] = url;
-        return acc;
-    }, {}); // acc type: { [key: string]: { o?: string, p?: string } }
-
-    // meme_o_N, meme_p_N이 모두 존재하는 것만 필터링 후 정렬
-    const memePairs = Object.entries(memeMap)
-        .filter(([_, pair]) => pair.o && pair.p) // 둘 다 있는 것만
-        .sort(([aKey], [bKey]) => parseInt(aKey.split('_')[1]) - parseInt(bKey.split('_')[1]))
-        .map(([_, pair]) => ({
-            o: pair.o,
-            p: pair.p
-    }));
-
-    const questionKeys = memePairs.flatMap((_, idx) => {
-        const i = idx + 1; // 1-based index
-        return [
-            `send_memeo_${i}_valence`,
-            `send_memeo_${i}_arousal`,
-            `send_memeo_${i}_expression`,
-            `send_memep_${i}_valence`,
-            `send_memep_${i}_arousal`,
-            `send_memep_${i}_expression`,
-        ];
-    });
-
-    const isFormValid = questionKeys.every((key) => formData[key] && formData[key] !== "");
 
     return (
         <div
@@ -104,13 +105,13 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData }) {
             </p>
 
             <div>
-                {memePairs.map((pair, idx) => (
-                    <div key={idx} style={{ marginBottom: "40px", borderTop: "1px solid #ddd", paddingBottom: "20px" }}>
+                {renderList.map(({ id, text, pair }, idx) => (
+                    <div key={id} style={{ marginBottom: "40px", borderTop: "1px solid #ddd", paddingBottom: "20px" }}>
                         <div style={{ margin: "30px 0", padding: "20px", background: "#f5f5f5", borderRadius: "8px" }}>
                             <label style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "10px", display: "block" }}>
                                 아래 gif에 대해 이전에 접한 경험이 있습니까? (복수 선택 가능)
                             </label>
-                            {[
+                            {[ 
                                 { key: "known_level_1", label: "출처를 알고 있다" },
                                 { key: "known_level_2", label: "이전에 직접 사용한 적이 있다" },
                                 { key: "known_level_3", label: "다른 사람이 사용하는 것을 본 적이 있다" },
@@ -119,8 +120,8 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData }) {
                                 <label key={key} style={{ display: "block", marginBottom: "8px", paddingLeft: "20px" }}>
                                     <input
                                         type="checkbox"
-                                        name={`send_experience_${idx + 1}_${key}`}
-                                        checked={!!formData[`send_experience_${idx + 1}_${key}`]}
+                                        name={`send_experience_${id}_${key}`}
+                                        checked={!!formData[`send_experience_${id}_${key}`]}
                                         onChange={e => {
                                             const { name, checked } = e.target;
                                             setFormData(prev => ({ ...prev, [name]: checked }));
@@ -133,10 +134,11 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData }) {
                         </div>
                         <div style={{ display: "flex", gap: "40px", justifyContent: "center", alignItems: "flex-start", margin: "30px 0" }}>
                             {[
-                                { img: pair.o, alt: `send_memeo_${idx + 1}` },
-                                { img: pair.p, alt: `send_memep_${idx + 1}` }
-                            ].map(({ img, alt }) => (
+                                { img: pair.o, alt: `send_${id}_o`, label: '원본(o)' },
+                                { img: pair.p, alt: `send_${id}_p`, label: '얼굴합성(p)' }
+                            ].map(({ img, alt, label }) => (
                                 <div key={alt} style={{ flex: 1, background: "#fafafa", borderRadius: "10px", boxShadow: "0 2px 8px #eee", padding: "10px", margin: "0 10px" }}>
+                                    <div style={{ fontWeight: 600, marginBottom: '8px', textAlign: 'left' }}>Message: {text}</div>
                                     <div style={{ display: "flex", justifyContent: "center" }}>
                                         <img
                                             src={img}

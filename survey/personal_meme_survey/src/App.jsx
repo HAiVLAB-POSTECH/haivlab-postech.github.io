@@ -84,6 +84,51 @@ function App() {
     }
   }, [userId]);
 
+  // Study B 메타데이터 로드
+  const [stimuli, setStimuli] = useState(null);
+  useEffect(() => {
+    let isMounted = true;
+    fetch('/survey/personal_meme_survey/study_b_stimuli.json')
+      .then((res) => res.json())
+      .then((data) => { if (isMounted) setStimuli(data); })
+      .catch((err) => console.error('Failed to load stimuli json:', err));
+    return () => { isMounted = false; };
+  }, []);
+
+  // 비시드 셔플(Fisher–Yates)
+  function shuffle(array) {
+    const result = array.slice();
+    for (let i = result.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+  }
+
+  // userId 기반 세트 순서 + 비시드 셔플로 Study B 아이템 생성
+  const studyBItems = useMemo(() => {
+    const id = parseInt(userId, 10);
+    if (!stimuli || !stimuli.sets || !id || Number.isNaN(id)) return [];
+
+    // 요구 패턴: 1: ABDC, 2: BCAD, 3: CDBA, 4: DACB (4명 주기)
+    // 구현: categories = [A,B,C,D], i=(id-1)%4
+    // order = [i, i+1, i-1, i-2] mod 4
+    const categories = ['A', 'B', 'C', 'D'];
+    const i = (id - 1) % 4;
+    const idxs = [i, (i + 1) % 4, (i + 3) % 4, (i + 2) % 4];
+    const rotatedOrder = idxs.map((k) => categories[k]);
+
+    console.log('[StudyB] userId=', id, 'i=', i, 'order=', rotatedOrder.join(''));
+
+    const combined = [];
+    for (const letter of rotatedOrder) {
+      const items = stimuli.sets[letter] || [];
+      const shuffled = shuffle(items); // 비시드 셔플
+      combined.push(...shuffled);
+    }
+    return combined; // [{id, text}, ...]
+  }, [stimuli, userId]);
+
   // study_a_free_chat의 진행 횟수 관리
   const [freeChatIndex, setFreeChatIndex] = useState(0);
 
@@ -213,6 +258,7 @@ function App() {
           onNext={changeScreen}
           emotionData={emotionData}
           setEmotionData={setEmotionData}
+          items={studyBItems}
         />
       )}
 
@@ -221,6 +267,7 @@ function App() {
           onNext={changeScreen}
           emotionData={emotionData}
           setEmotionData={setEmotionData}
+          items={studyBItems}
         />
       )}
 
