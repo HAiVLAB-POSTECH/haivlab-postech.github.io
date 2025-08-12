@@ -5,7 +5,7 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place, va
     const [formData, setFormData] = useState({});
 
     useEffect(() => {
-        const keys = Array.from({ length: 16 }, (_, i) => `post_a${i + 1}_${place}`);
+        const keys = Array.from({ length: 10 }, (_, i) => `post_a${i + 1}_${place}`);
         const initialData = keys.reduce((acc, key) => {
             acc[key] = "";
             return acc;
@@ -125,7 +125,7 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place, va
                 {
                     key: `post_a9_${place}`,
                     question: [
-                        "상대방과의 대화는 즐거웠다",
+                        "9. 상대방과의 대화는 즐거웠다",
                     ],
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
@@ -133,7 +133,7 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place, va
                 {
                     key: `post_a10_${place}`,
                     question: [
-                        "나는 이번 대화를 통해 상대방과 더 가까워졌다고 느낀다",
+                        "10. 나는 이번 대화를 통해 상대방과 더 가까워졌다고 느낀다",
                     ],
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
