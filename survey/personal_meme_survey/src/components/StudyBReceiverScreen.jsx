@@ -53,7 +53,7 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
             .filter(({ pair }) => pair && pair.o && pair[rightRole]);
     }, [items, pairMap, rightRole]);
 
-    const questionKeys = renderList.flatMap((item) => {
+    const questionKeysFromItems = renderList.flatMap((item) => {
         const roles = ['o', rightRole];
         return roles.flatMap((r) => (
             [
@@ -63,6 +63,8 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
             ]
         ));
     });
+
+    const questionKeys = [...questionKeysFromItems, "recv_overall_self_face"];
 
     const isFormValid = questionKeys.every((key) => formData[key] && formData[key] !== "");
 
@@ -242,9 +244,34 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
                     </div>
                 ))}
             </div>
+            <div style={{ margin: "30px 0", padding: "20px", background: "#f5f5f5", borderRadius: "8px" }}>
+            <label style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "10px", display: "block" }}>
+                위의 <strong>합성된 GIF들</strong>이 전반적으로 <strong>당신의 얼굴</strong>처럼 보인다고 느끼십니까?
+            </label>
+            <p style={{ color: "#666", margin: "6px 0 14px" }}>
+                1 = 전혀 그렇지 않다 &nbsp;~&nbsp; 7 = 매우 그렇다
+            </p>
 
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", alignItems: "center", paddingLeft: 8 }}>
+                <span style={{ marginTop: 6 }}>전혀 그렇지 않다</span>
+                {[1,2,3,4,5,6,7].map((n) => (
+                <label key={n} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <span style={{ marginBottom: 4 }}>{n}</span>
+                    <input
+                    type="radio"
+                    name="recv_overall_self_face"
+                    value={String(n)}
+                    checked={formData["recv_overall_self_face"] === String(n)}
+                    onChange={handleChange}
+                    />
+                </label>
+                ))}
+                <span style={{ marginTop: 6 }}>매우 그렇다</span>
+            </div>
+            </div>
             {/* Next Button */}
             <div style={{ textAlign: "center", marginTop: "30px", marginBottom: "50px", paddingBottom: "50px" }}>
+                
                 <button
                     onClick={handleNext}
                     disabled={!isFormValid}

@@ -16,7 +16,7 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place, va
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
-    };
+    };S
 
     // const isFormValid = true;
     const isFormValid = Object.values(formData).every((v) => v !== "");
