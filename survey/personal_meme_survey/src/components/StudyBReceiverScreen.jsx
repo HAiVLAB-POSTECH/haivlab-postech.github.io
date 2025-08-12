@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
-import valenceImage from '/src/assets/images/valence_example.png';
-import arousalImage from '/src/assets/images/arousal_example.png';
+import valenceImage from '/src/assets/images/valence_survey.png';
+import arousalImage from '/src/assets/images/arousal_survey.png';
 
 function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [], userId }) {
 
