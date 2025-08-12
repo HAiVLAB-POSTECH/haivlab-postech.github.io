@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function StudyAFreeChatScreen({ onNext, freeChatData, setFreeChatData, place }) { // place 추가
+function StudyAFreeChatScreen({ onNext, freeChatData, setFreeChatData, place, variant }) { // place, variant 추가
     const [formData, setFormData] = useState({
         [`pre_a1_${place}`]: "",
         [`pre_a2_${place}`]: "",
@@ -35,6 +35,8 @@ function StudyAFreeChatScreen({ onNext, freeChatData, setFreeChatData, place }) 
         paddingLeft: "10px",
     };
 
+    const variantLabel = variant === 'swap' ? '(얼굴합성)' : '(원본)';
+
     return (
         <div
             style={{
@@ -48,7 +50,7 @@ function StudyAFreeChatScreen({ onNext, freeChatData, setFreeChatData, place }) 
         >
 
             <h2 style={{ textAlign: 'left', color: '#333', borderBottom: '2px solid #ddd', paddingBottom: '10px' }}>
-                1차 실험 설문지 "{place}" (1/2) 자유 대화
+                1차 실험 설문지 "{place}" (1/2) 자유 대화 <span style={{ color: '#666', fontSize: '0.9em', marginLeft: '6px' }}>{variantLabel}</span>
             </h2>
             <p style={{ fontSize: '16px', color: '#555', backgroundColor: '#f0f0f0', padding: '20px', borderRadius: '5px' }}>
                 여러분은 두 번의 대화를 경험하게 됩니다. <br/>

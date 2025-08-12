@@ -6,7 +6,9 @@ function InitialScreen({ onStartA, onStartB, userId, setUserId, knownPeriod, set
 
   // 입력 변경 시 App.jsx의 userId state를 업데이트
   const handleChange = (e) => {
-    setUserId(e.target.value);
+    // 숫자만 허용
+    const onlyDigits = e.target.value.replace(/\D/g, '');
+    setUserId(onlyDigits);
   };
 
   return (
@@ -35,6 +37,8 @@ function InitialScreen({ onStartA, onStartB, userId, setUserId, knownPeriod, set
       {/* ID 입력받는 Text Input */}
       <input
         type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
         value={userId}
         onChange={handleChange}
         placeholder="실험자 번호를 입력하세요"

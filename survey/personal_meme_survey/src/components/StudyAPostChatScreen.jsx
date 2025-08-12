@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import intimacyImage from '/src/assets/images/intimacy.png';
 
-function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place }) {
+function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place, variant }) {
     const [formData, setFormData] = useState({});
 
     useEffect(() => {
@@ -40,6 +40,8 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place }) 
         paddingLeft: "10px",
     };
 
+    const variantLabel = variant === 'swap' ? '(얼굴합성)' : '(원본)';
+
     return (
         <div
             style={{
@@ -52,11 +54,11 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place }) 
             }}
         >
             <h2 style={{ textAlign: 'left', color: '#333', borderBottom: '2px solid #ddd', paddingBottom: '10px' }}>
-                1차 실험 설문지 "{place}" (2/2) 경험 평가
+                1차 실험 설문지 "{place}" (2/2) 경험 평가 <span style={{ color: '#666', fontSize: '0.9em', marginLeft: '6px' }}>{variantLabel}</span>
             </h2>
 
             <h2 style={{ textAlign: 'left', color: '#333', paddingBottom: '0px' }}>
-                "🗽 단 하루로 완성하는 {place} 여행 설계 대화" 에 대한 경험 평가
+                "🗽 단 하루로 완성하는 {place} 여행 설계 대화" 에 대한 경험 평가 
             </h2>
             <p style={{ fontSize: '16px', color: '#555', backgroundColor: '#f0f8ff', padding: '20px', borderRadius: '5px', marginTop: '20px' }}>
                 여러분은 방금 친구와 함께 '단 하루로 완성하는 {place} 여정 설계" 주제로 여행 계획 대화를 나누었습니다.<br/>
