@@ -46,10 +46,10 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
     const isOdd = Number.parseInt(userId, 10) % 2 === 1;
     const rightRole = isOdd ? '2' : '1'; // 수신자: 홀수→_2, 짝수→_1
 
-    // 전달받은 items를 pairMap과 결합하여 렌더용 리스트 생성
+    // 전달받은 items를 pairMap과 결합하여 렌더용 리스트 생성 (세트 레터 보존)
     const renderList = useMemo(() => {
         return items
-            .map(({ id, text }) => ({ id, text, pair: pairMap[id] }))
+            .map((item) => ({ ...item, pair: pairMap[item.id] }))
             .filter(({ pair }) => pair && pair.o && pair[rightRole]);
     }, [items, pairMap, rightRole]);
 
@@ -107,7 +107,7 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
             </p>
 
             <div>
-                {renderList.map(({ id, text, pair }) => (
+                {renderList.map(({ id, text, pair, _set }) => (
                     <div key={id} style={{ marginBottom: "40px", borderTop: "1px solid #ddd", paddingBottom: "20px" }}>
                         <div style={{ margin: "30px 0", padding: "20px", background: "#f5f5f5", borderRadius: "8px" }}>
                             <label style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "10px", display: "block" }}>
@@ -140,7 +140,10 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
                                 { img: pair[rightRole], alt: `recv_${id}_${rightRole}`, label: `상대(${rightRole})` }
                             ].map(({ img, alt, label }) => (
                                 <div key={alt} style={{ flex: 1, background: "#fafafa", borderRadius: "10px", boxShadow: "0 2px 8px #eee", padding: "10px", margin: "0 10px" }}>
-                                    <div style={{ fontWeight: 600, marginBottom: '8px', textAlign: 'left' }}>Message: {text}</div>
+                                    <div style={{ fontWeight: 600, marginBottom: '8px', textAlign: 'left' }}>
+                                        Message: {text}
+                                        <span style={{ color: '#888', marginLeft: 8, fontWeight: 400 }}>(Set: {_set})</span>
+                                    </div>
                                     <div style={{ display: "flex", justifyContent: "center" }}>
                                         <img
                                             src={img}
@@ -244,6 +247,7 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
                     </div>
                 ))}
             </div>
+
             <div style={{ margin: "30px 0", padding: "20px", background: "#f5f5f5", borderRadius: "8px" }}>
             <label style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "10px", display: "block" }}>
                 위의 <strong>합성된 GIF들</strong>이 전반적으로 <strong>당신의 얼굴</strong>처럼 보인다고 느끼십니까?
@@ -271,7 +275,6 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
             </div>
             {/* Next Button */}
             <div style={{ textAlign: "center", marginTop: "30px", marginBottom: "50px", paddingBottom: "50px" }}>
-                
                 <button
                     onClick={handleNext}
                     disabled={!isFormValid}

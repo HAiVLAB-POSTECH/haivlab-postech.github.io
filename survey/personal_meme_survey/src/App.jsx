@@ -49,7 +49,7 @@ function App() {
     }
   };
 
-  // 4케이스 세션 구성: userId에 따라 { place, variant } 2개 세션을 생성
+  // Test A 세션 구성: userId % 4에 따라 { place, variant } 2개 세션 생성
   const sessions = useMemo(() => {
     const id = parseInt(userId, 10);
     if (!id || Number.isNaN(id)) {
@@ -58,24 +58,24 @@ function App() {
         { place: '파리', variant: 'orig' },
       ];
     }
-    const caseIndex = Math.floor(((id - 1) % 8) / 2) + 1; // 1~8 순환, 2명씩 같은 케이스
-    switch (caseIndex) {
-      case 1:
+    const mod = ((id - 1) % 4) + 1; // 1..4 반복
+    switch (mod) {
+      case 1: // 뉴욕(얼굴합성) -> 파리(원본)
         return [
-          { place: '뉴욕', variant: 'swap' }, // 얼굴합성
+          { place: '뉴욕', variant: 'swap' },
           { place: '파리', variant: 'orig' },
         ];
-      case 2:
+      case 2: // 뉴욕(원본) -> 파리(얼굴합성)
         return [
           { place: '뉴욕', variant: 'orig' },
           { place: '파리', variant: 'swap' },
         ];
-      case 3:
+      case 3: // 파리(얼굴합성) -> 뉴욕(원본)
         return [
           { place: '파리', variant: 'swap' },
           { place: '뉴욕', variant: 'orig' },
         ];
-      case 4:
+      case 4: // 파리(원본) -> 뉴욕(얼굴합성)
       default:
         return [
           { place: '파리', variant: 'orig' },
@@ -124,8 +124,9 @@ function App() {
     for (const letter of rotatedOrder) {
       const items = stimuli.sets[letter] || [];
       const shuffled = shuffle(items); // 비시드 셔플
-      combined.push(...shuffled);
+      combined.push(...shuffled.map((it) => ({ ...it, _set: letter })));
     }
+    console.log('[StudyB] combined sets =', combined.map((x) => x._set).join(''));
     return combined; // [{id, text}, ...]
   }, [stimuli, userId]);
 
