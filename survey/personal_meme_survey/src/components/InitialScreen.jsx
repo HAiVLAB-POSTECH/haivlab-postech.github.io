@@ -1,6 +1,6 @@
 import React from 'react';
 
-function InitialScreen({ onStartA, onStartB, userId, setUserId, knownPeriod, setKnownPeriod }) {
+function InitialScreen({ onStartA, onStartB, userId, setUserId, gender, setGender, age, setAge, knownPeriod, setKnownPeriod }) {
   const isButtonDisabled =
       userId.trim() == "" || knownPeriod == "";
 
@@ -9,6 +9,16 @@ function InitialScreen({ onStartA, onStartB, userId, setUserId, knownPeriod, set
     // 숫자만 허용
     const onlyDigits = e.target.value.replace(/\D/g, '');
     setUserId(onlyDigits);
+  };
+
+  const handleGenderChange = (e) => {
+    setGender(e.target.value); // ✅ 성별은 문자열 그대로
+  };
+
+  const handleAgeChange = (e) => {
+    // 숫자만 허용
+    const onlyDigits = e.target.value.replace(/\D/g, '');
+    setAge(onlyDigits);
   };
 
   return (
@@ -43,6 +53,27 @@ function InitialScreen({ onStartA, onStartB, userId, setUserId, knownPeriod, set
         onChange={handleChange}
         placeholder="실험자 번호를 입력하세요"
         style={{ padding: '8px', fontSize: '14px', marginBottom: '10px' }}
+      />
+
+      <h2>실험자 성별을 입력하세요</h2>
+      {/* 성별 입력받는 Text Input */}
+      <input
+        type="text"
+        value={gender}
+        onChange={handleGenderChange}
+        placeholder="자신의 성별을 적어주세요"
+        style={{ padding: '8px', fontSize: '14px', marginBottom: '10px' }}
+      />
+
+      <h2>실험자 나이를 입력하세요</h2>
+      {/* 나이 입력받는 Text Input */}
+      <input
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
+        onChange={handleAgeChange}
+        placeholder="자신의 나이를 적어주세요"
+        style={{ padding: '8px', fontSize: '14px',  marginBottom: '10px' }}
       />
 
       {/* Known period */}

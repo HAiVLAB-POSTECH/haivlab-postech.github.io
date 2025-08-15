@@ -22,6 +22,8 @@ function App() {
 
   // 참여자 정보
   const [userId, setUserId] = useState('');
+  const [gender, setGender] = useState('');
+  const [age, setAge] = useState('');
   const [knownPeriod, setKnownPeriod] = useState('');
 
   const [isSending, setIsSending] = useState(false);
@@ -176,11 +178,15 @@ function App() {
     // 실제로는 userId, freeChatData, annotationData를 각각 따로 append해도 되지만
     // 한 번에 객체 전체를 JSON으로 stringify해서 전송해도 문제없음
     console.log('userId:', userId);
+    console.log('gender:', gender);
+    console.log('age:', age);
     console.log('knownPeriod:', knownPeriod);
     console.log('freeChatData:', freeChatData);
     console.log('emotionData:', emotionData);
 
     formBody.append('userId', userId);
+    formBody.append('gender', gender);
+    formBody.append('age', age);
     formBody.append('knownPeriod', knownPeriod);
     formBody.append('freeChatData', JSON.stringify(freeChatData));
     formBody.append('emotionData', JSON.stringify(emotionData));
@@ -223,6 +229,10 @@ function App() {
           onStartB={startTestB}
           userId={userId}
           setUserId={setUserId}
+          gender={gender}
+          setGender={setGender}
+          age={age}
+          setAge={setAge}
           knownPeriod={knownPeriod}
           setKnownPeriod={setKnownPeriod}
         />
