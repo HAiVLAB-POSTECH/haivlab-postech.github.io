@@ -154,11 +154,17 @@ function App() {
         setScreen('end');
       }
     } else if (screen === 'study_b_emotion_rating') {
-      setScreen('study_b_receiver');
+      // 홀수면 발신자부터, 짝수면 수신자부터
+      setScreen((userId & 1) ? 'study_b_sender' : 'study_b_receiver');
+
     } else if (screen === 'study_b_receiver') {
-      setScreen('study_b_sender');
+      // 홀수는 수신자가 두 번째 → end, 짝수는 수신자 먼저라서 다음은 발신자
+      setScreen((userId & 1) ? 'end' : 'study_b_sender');
+
     } else if (screen === 'study_b_sender') {
-      setScreen('end');
+      // 홀수는 발신자 먼저라서 다음은 수신자, 짝수는 발신자가 두 번째 → end
+      setScreen((userId & 1) ? 'study_b_receiver' : 'end');
+
     } else if (screen === 'end') {
       setScreen('initial');
     }
