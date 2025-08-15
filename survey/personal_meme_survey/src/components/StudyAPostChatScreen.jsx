@@ -167,32 +167,58 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place, va
                                 ))
                                 : question}
                         </p>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", padding: "20px" }}>
-                            <div style={{marginTop: "26px"}}>{labels[0]}</div>
-                            {options.map((option) => (
-                                <div
-                                    key={option}
-                                    style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        alignItems: "center",
-                                        marginRight: "16px",
-                                        whiteSpace: "nowrap",
-                                        fontWeight: 400,
-                                    }}
-                                >
-                                    <span style={{ marginBottom: "4px" }}>{option}</span>
-                                    <input
-                                        type="radio"
-                                        name={key}
-                                        value={option.toString()}
-                                        checked={formData[key] === option.toString()}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                            ))}
-                            <div style={{marginTop: "26px"}}>{labels[1]}</div>
-                        </div>
+                        <div style={{
+                            display: "flex",
+                            justifyContent: "center", // Center the group of buttons
+                            alignItems: "flex-start",
+                            padding: "10px 0"
+                        }}>
+                            {options.map((option) => {
+                                const pointLabel = {
+                                    1: labels[0],
+                                    4: "보통",
+                                    7: labels[1],
+                                };
+
+                                return (
+                                    <div
+                                        key={option}
+                                        style={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                            textAlign: "center",
+                                            width: "80px", // Adjust width for appropriate spacing
+                                        }}
+                                    >
+                                        {/* Number (1, 2, 3...) */}
+                                        <span style={{ marginBottom: "4px" }}>{option}</span>
+
+                                        {/* Radio Button */}
+                                        <input
+                                            type="radio"
+                                            name={key}
+                                            value={option.toString()}
+                                            checked={formData[key] === option.toString()}
+                                            onChange={handleChange}
+                                            style={{ margin: "4px 0" }}
+                                        />
+
+                                        {/* Conditional Label (at points 1, 4, 7) */}
+                                        <span style={{
+                                            fontSize: "14px",
+                                            color: "#666",
+                                            height: "2.5em",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            whiteSpace: "nowrap", // Prevents labels from wrapping
+                                        }}>
+                                            {pointLabel[option] || <>&nbsp;</>}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                        </div>                    
                     </div>
                 </div>
             ))}
