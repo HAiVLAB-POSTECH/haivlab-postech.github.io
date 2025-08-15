@@ -245,6 +245,7 @@ function App() {
           setFreeChatData={setFreeChatData}
           place={sessions[freeChatIndex].place}
           variant={sessions[freeChatIndex].variant}
+          userId={userId}
         />
       )}
 
