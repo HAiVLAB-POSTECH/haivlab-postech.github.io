@@ -100,13 +100,13 @@ function StudyAFreeChatScreen({ onNext, freeChatData, setFreeChatData, place, va
                 실험 내용 확인이 되었다면, 다음 순서로 실험을 준비해 주세요 😊 
                 <br/><br/>
                 1. 다음 <a
-                        href="http://chlee.postech.ac.kr:8065/signup_user_complete/?id=np5nrxhfsjypt8cptqsyay4mwr&md=link&sbr=fa"
+                        href="http://chlee.postech.ac.kr:8065/login?id=np5nrxhfsjypt8cptqsyay4mwr&md=link&sbr=fa"
                         target="_blank"
                         rel="noopener noreferrer"
                         >링크</a>
                     에 들어가 창을 띄우고, 명시된 Username과 password를 쳐주세요 <br/>
-                &nbsp;&nbsp;&nbsp;Username : {userId}{username}<br/>
-                &nbsp;&nbsp;&nbsp;Password : {userId}<br/>
+                &nbsp;&nbsp;&nbsp;Username : subject{userId}{username}<br/>
+                &nbsp;&nbsp;&nbsp;Password : subject{userId}{username}<br/>
                 2. 로그인을 했다면, 왼쪽 사이드바에서 채팅방 이름에 <b>'{roomname}'</b>이 붙은 방으로 들어가 주세요<br/>
                 3. 이제 <b>채팅 전용 사이트(방금 연 사이트)와</b>, <b>현재 설문용 사이트</b>를 양쪽에 세팅해 놓고 대화할 준비를 해주세요<br/>
                 4. 대화 준비가 되었다면, 방금 들어온 채팅방에  <b>'준비 되었습니다'</b>를 쳐주세요 🥳
