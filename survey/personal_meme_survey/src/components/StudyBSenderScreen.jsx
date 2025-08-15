@@ -245,35 +245,55 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [], u
                                                         ))
                                                         : question}
                                                 </p>
-                                                <div style={{ display: "flex", flexWrap: "wrap", gap: "2px", padding: "20px" }}>
-                                                    <div style={{ marginTop: "26px" }}>{labels[0]}</div>
-                                                    {options.map((option) => (
+                                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: "10px 0" }}>
+                                                {options.map((option) => {
+                                                    // 라벨을 정의합니다. 1, 4, 7에 해당하는 라벨을 설정합니다.
+                                                    const pointLabel = {
+                                                        1: labels[0], // "매우 불쾌함" 또는 "매우 차분함"
+                                                        4: "보통",
+                                                        7: labels[1], // "매우 유쾌함" 또는 "매우 들뜸"
+                                                    };
+
+                                                    return (
                                                         <div
                                                             key={option}
                                                             style={{
                                                                 display: "flex",
                                                                 flexDirection: "column",
                                                                 alignItems: "center",
-                                                                marginRight: "16px",
-                                                                whiteSpace: "nowrap",
-                                                                fontWeight: 400,
+                                                                // flex: 1을 주어 각 항목이 동일한 공간을 차지하게 합니다.
+                                                                flex: 1, 
+                                                                textAlign: "center"
                                                             }}
                                                         >
+                                                            {/* 1. 숫자 (1, 2, 3...) */}
                                                             <span style={{ marginBottom: "4px" }}>{option}</span>
+
+                                                            {/* 2. 라디오 버튼 */}
                                                             <input
                                                                 type="radio"
                                                                 name={key}
                                                                 value={option.toString()}
                                                                 checked={formData[key] === option.toString()}
-                                                                onChange={e => {
-                                                                    const { name, value } = e.target;
-                                                                    setFormData(prev => ({ ...prev, [name]: value }));
-                                                                }}
+                                                                onChange={handleChange}
+                                                                style={{ margin: "4px 0" }} // 위아래 간격 추가
                                                             />
+
+                                                            {/* 3. 조건부 라벨 (1, 4, 7 아래에만 표시) */}
+                                                            <span style={{ 
+                                                                fontSize: "14px", 
+                                                                color: "#666", 
+                                                                height: "2.5em", // 라벨 영역 높이를 고정하여 정렬 유지
+                                                                display: "flex",
+                                                                alignItems: "center"
+                                                            }}>
+                                                                {/* pointLabel 객체에 해당 option 키가 있으면 라벨을 표시합니다. */}
+                                                                {pointLabel[option] || <>&nbsp;</>}
+                                                            </span>
                                                         </div>
-                                                    ))}
-                                                    <div style={{ marginTop: "26px" }}>{labels[1]}</div>
-                                                </div>
+                                                    );
+                                                })}
+                                            </div>                                            
                                             </div>
                                         </div>
                                     ))}
@@ -284,30 +304,78 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [], u
                 ))}
             </div>
             <div style={{ margin: "30px 0", padding: "20px", background: "#f5f5f5", borderRadius: "8px" }}>
-            <label style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "10px", display: "block" }}>
-                위의 <strong>합성된 GIF들</strong>이 전반적으로 <strong>당신의 얼굴</strong>처럼 보인다고 느끼십니까?
-            </label>
-            <p style={{ color: "#666", margin: "6px 0 14px" }}>
-                1 = 전혀 그렇지 않다 &nbsp;~&nbsp; 7 = 매우 그렇다
-            </p>
-
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", alignItems: "center", paddingLeft: 8 }}>
-                <span style={{ marginTop: 6 }}>전혀 그렇지 않다</span>
-                {[1,2,3,4,5,6,7].map((n) => (
-                <label key={n} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <span style={{ marginBottom: 4 }}>{n}</span>
-                    <input
-                    type="radio"
-                    name="recv_overall_self_face"
-                    value={String(n)}
-                    checked={formData["recv_overall_self_face"] === String(n)}
-                    onChange={handleChange}
-                    />
+                <label style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "10px", display: "block" }}>
+                    위의 <strong>합성된 GIF들</strong>이 전반적으로 <strong>당신의 얼굴</strong>처럼 보인다고 느끼십니까?
                 </label>
-                ))}
-                <span style={{ marginTop: 6 }}>매우 그렇다</span>
-            </div>
-            </div>
+                {/* The descriptive paragraph is no longer needed, as labels are below the scale */}
+                
+                {(() => {
+                    const key = "recv_overall_self_face";
+                    const options = [1, 2, 3, 4, 5, 6, 7];
+                    const labels = ["전혀 그렇지 않다", "매우 그렇다"];
+                    
+                    const pointLabel = {
+                        1: labels[0],
+                        4: "보통",
+                        7: labels[1],
+                    };
+
+                    return (
+                        <div style={{ 
+                            display: "flex", 
+                            justifyContent: "center", // Center the group of buttons
+                            alignItems: "flex-start", 
+                            padding: "10px 0" 
+                        }}>
+                            {options.map((option) => {
+                                const pointLabel = {
+                                    1: labels[0],
+                                    4: "보통",
+                                    7: labels[1],
+                                };
+
+                                return (
+                                    <div
+                                        key={option}
+                                        style={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                            textAlign: "center",
+                                            width: "80px", // Give each item a fixed width
+                                        }}
+                                    >
+                                        {/* 1. Number (1, 2, 3...) */}
+                                        <span style={{ marginBottom: "4px" }}>{option}</span>
+
+                                        {/* 2. Radio Button */}
+                                        <input
+                                            type="radio"
+                                            name={key} // Ensure 'key' is defined in the parent scope
+                                            value={option.toString()}
+                                            checked={formData[key] === option.toString()}
+                                            onChange={handleChange}
+                                            style={{ margin: "4px 0" }}
+                                        />
+
+                                        {/* 3. Conditional Label */}
+                                        <span style={{ 
+                                            fontSize: "14px", 
+                                            color: "#666", 
+                                            height: "2.5em",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            whiteSpace: "nowrap", // Prevents long labels from wrapping
+                                        }}>
+                                            {pointLabel[option] || <>&nbsp;</>}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                        </div>                    
+                        );
+                })()}
+            </div>            
             {/* Next Button */}
             <div style={{ textAlign: "center", marginTop: "30px", marginBottom: "50px", paddingBottom: "50px" }}>
                 <button
