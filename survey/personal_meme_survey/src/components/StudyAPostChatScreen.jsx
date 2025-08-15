@@ -21,6 +21,8 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place, va
     // const isFormValid = true;
     const isFormValid = Object.values(formData).every((v) => v !== "");
 
+    const emoji = place === '뉴욕' ? '🗽' : '🥐';
+
     // "Next" 버튼 클릭 시 App으로 폼 데이터 전달
     const handleNext = () => {
         if (!isFormValid) return;
@@ -58,7 +60,7 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place, va
             </h2>
 
             <h2 style={{ textAlign: 'left', color: '#333', paddingBottom: '0px' }}>
-                "🗽 단 하루로 완성하는 {place} 여행 설계 대화" 에 대한 경험 평가 
+                "{emoji} 단 하루로 완성하는 {place} 여행 설계 대화" 에 대한 경험 평가 
             </h2>
             <p style={{ fontSize: '16px', color: '#555', backgroundColor: '#f0f8ff', padding: '20px', borderRadius: '5px', marginTop: '20px' }}>
                 여러분은 방금 친구와 함께 '단 하루로 완성하는 {place} 여정 설계" 주제로 여행 계획 대화를 나누었습니다.<br/>
