@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
-import valenceImage from '/src/assets/images/valence_example.png';
-import arousalImage from '/src/assets/images/arousal_example.png';
+import valenceImage from '/src/assets/images/valence_survey.png';
+import arousalImage from '/src/assets/images/arousal_survey.png';
 
 function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [], userId }) {
 
@@ -68,6 +68,34 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [], u
 
     const isFormValid = questionKeys.every((key) => formData[key] && formData[key] !== "");
 
+    const nameLabel = { fontSize: 14, color: "#8E8E93", marginBottom: 6, textAlign: "right" };
+    const pairRow   = { display: "flex", gap: "40px", justifyContent: "center", alignItems: "flex-start", margin: "30px 0" };
+
+    // iMessage 발신(오른쪽) 버블
+    const iosSentWrap = { display: "flex", flexDirection: "column", justifyContent: "flex-end", gap: 8 }; // 오른쪽 정렬
+    const iosSentBubble = {
+        position: "relative",
+        background: "#0B93F6",          // iMessage 파란색
+        border: "none",
+        borderRadius: 20,
+        padding: 12,
+        color: "#fff",                   // 텍스트 하양
+        lineHeight: 1.45,
+        display: "inline-block",
+        maxWidth: "min(100%, 560px)",
+        marginLeft: "auto", 
+    };
+    const iosSentTail = {
+        position: "absolute",
+        right: -4,
+        bottom: 6,
+        width: 12,
+        height: 12,
+        background: "#0B93F6",
+        transform: "rotate(220deg)",
+        borderTopLeftRadius: 12,
+    };
+
     // "Next" 버튼 클릭 시 App으로 폼 데이터 전달
     const handleNext = () => {
         if (!isFormValid) return;
@@ -96,19 +124,19 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [], u
                 gif 감정평가 설문지 (3/3)
             </h2>
             <h2 style={{ textAlign: 'left', color: '#333', paddingBottom: '0px' }}>
-                발신자 역할 gif 감정 평가
+                <span style={{ backgroundColor: '#ffe066'}}>발신자 역할</span> gif 감정 평가
             </h2>
             <p style={{ fontSize: '16px', color: '#555' }}>
-                당신이 해당 메시지의 발신자라고 가정해 주세요.
+                당신이 해당 메시지의 <span style = {{backgroundColor: '#ffe066', color: '#B60000', fontWeight: 'bold'}}>발신자</span>라고 가정해 주세요.
                 <br /><br />
                 그리고 제시된 텍스트에 적절한 GIF를 직접 선택해 함께 전송했다고 가정했을 때,<br />
-                발신자 입장에서 해당 GIF에서 느껴지는 감정의 특성을 세 가지 기준에 따라 평가해 주세요
+                <span style = {{backgroundColor: '#ffe066', color: '#B60000', fontWeight: 'bold'}}>발신자 입장</span>에서 해당 GIF에서 느껴지는 감정의 특성을 세 가지 기준에 따라 평가해 주세요
                 <br /><br /><br />
-                ** 텍스트와 GIF의 조합은 이미 상황에 적절하다고 전제되어 있으므로, 텍스트/GIF간의 어울림 여부는 평가 대상이 아닙니다
+                <span style = {{color: '#B60000', fontWeight: 'bold'}}>** 텍스트와 GIF의 조합은 이미 상황에 적절하다고 전제되어 있으므로, 텍스트/GIF간의 어울림 여부는 평가 대상이 아닙니다</span>
             </p>
 
             <div>
-                {renderList.map(({ id, text, pair }) => (
+                {renderList.map(({ id, text, pair, _set }) => (
                     <div key={id} style={{ marginBottom: "40px", borderTop: "1px solid #ddd", paddingBottom: "20px" }}>
                         <div style={{ margin: "30px 0", padding: "20px", background: "#f5f5f5", borderRadius: "8px" }}>
                             <label style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "10px", display: "block" }}>
@@ -141,23 +169,33 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [], u
                                 { img: pair[rightRole], alt: `send_${id}_${rightRole}`, label: `상대(${rightRole})` }
                             ].map(({ img, alt, label }) => (
                                 <div key={alt} style={{ flex: 1, background: "#fafafa", borderRadius: "10px", boxShadow: "0 2px 8px #eee", padding: "10px", margin: "0 10px" }}>
-                                    <div style={{ fontWeight: 600, marginBottom: '8px', textAlign: 'left' }}>Message: {text}</div>
-                                    <div style={{ display: "flex", justifyContent: "center" }}>
+                                    {/* 상단 라벨 */}
+                                        <div style={nameLabel}>
+                                            내가 보낸 메시지
+                                            <span style={{ color: '#9aa0a6', marginLeft: 8 }}>(Set: {_set})</span>
+                                        </div>
+
+                                        {/* iOS 발신 말풍선: 오른쪽 정렬, 파란색, 하얀 텍스트 */}
+                                        <div style={iosSentWrap}>
+                                            <div style={iosSentBubble}>
+                                            <div style={iosSentTail} />
+                                            <div>{text}</div>
+                                        </div>
                                         <img
                                             src={img}
                                             alt={alt}
-                                            style={{ maxWidth: "100%", borderRadius: "8px", boxShadow: "0 2px 8px #ccc", marginBottom: "20px" }}
-                                            onContextMenu={e => e.preventDefault()}
-                                            onDragStart={e => e.preventDefault()}
+                                            style={{ display: "block", height: "auto", borderRadius: 12, maxWidth: "min(100%, 360px)", marginLeft: "auto" }}
+                                            onContextMenu={(e) => e.preventDefault()}
+                                            onDragStart={(e) => e.preventDefault()}
                                         />
-                                    </div>
+                                </div>                                    
                                     {[
                                         {
                                             key: `${alt}_valence`,
                                             image: valenceImage,
                                             question: [
-                                                "1. 해당 gif가 표현하는 valence에 대해서 평가해주세요",
-                                                "* 느껴지는 감정이 얼마나 유쾌한지 불쾌한지",
+                                                <> 1. 해당 메시지가 전달하는 <span style = {{color: '#2F4B8F', fontWeight: 'bold'}}>나의 감정</span>은 <strong>‘매우 부정적’↔‘매우 긍정적’</strong><br/> 
+                                                사이에서 어디에 가깝습니까?</>
                                             ],
                                             options: [1, 2, 3, 4, 5, 6, 7],
                                             labels: ["매우 불쾌함", "매우 유쾌함"],
@@ -166,15 +204,15 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [], u
                                             key: `${alt}_arousal`,
                                             image: arousalImage,
                                             question: [
-                                                "2. 해당 gif가 표현하는 arousal에 대해서 평가해주세요",
-                                                "*  느껴지는 감정이 얼마나 차분한지, 혹은 얼마나 강렬하고 활발한지",
+                                                <> 2. 해당 메시지가 전달하는 <span style = {{color: '#2F4B8F', fontWeight: 'bold'}}>나의 감정 각성 수준</span>은 <br/> 
+                                                <strong>‘매우 차분함’↔‘매우 격앙됨’</strong> 사이에서 어디에 가깝습니까?</>
                                             ],
                                             options: [1, 2, 3, 4, 5, 6, 7],
                                             labels: ["매우 차분함", "매우 들뜸"],
                                         },
                                         {
                                             key: `${alt}_expression`,
-                                            question: "3. 해당 gif가 당신의 감정을 잘 표현했다고 생각하십니까?",
+                                            question: <> 3. 해당 메시지가 <span style = {{color: '#2F4B8F', fontWeight: 'bold'}}>나의 실제 감정</span>을 <b>더 풍부하게 표현한다고</b> 생각하십니까?</>,
                                             options: [1, 2, 3, 4, 5, 6, 7],
                                             labels: ["전혀 그렇지 않다", "매우 그렇다"],
                                         },

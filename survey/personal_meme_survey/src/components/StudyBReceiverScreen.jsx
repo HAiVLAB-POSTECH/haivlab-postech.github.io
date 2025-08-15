@@ -68,6 +68,35 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
 
     const isFormValid = questionKeys.every((key) => formData[key] && formData[key] !== "");
 
+    // 스타일: 채팅풍선(좌측)
+    const nameLabel = { fontSize: 14, color: "#8E8E93", marginBottom: 6 };
+    const chatRow = { display: "flex", alignItems: "flex-start"}; // 좌측 버블
+    // iMessage 수신 버블
+    const iosBubble = {
+        position: "relative",
+        background: "#ECEEF1",
+        border: "none",
+        borderRadius: 20,
+        padding: 12,
+        color: "#111",
+        lineHeight: 1.45,
+        marginBottom: 8, 
+        display: "inline-block",             // ✅ 내용만큼만
+        maxWidth: "min(100%, 560px)",        // ✅ 최대 폭 제한
+    };
+    const iosTail = {
+        position: "absolute",
+        left: -6,
+        bottom: 10,
+        width: 12,
+        height: 12,
+        background: "#ECEEF1",
+        transform: "rotate(45deg)",
+        borderBottomRightRadius: 12,
+    };
+
+
+
     // "Next" 버튼 클릭 시 App으로 폼 데이터 전달
     const handleNext = () => {
         if (!isFormValid) return;
@@ -98,10 +127,10 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
                 <span style={{ backgroundColor: '#ffe066'}}>수신자 역할</span> gif 감정 평가
             </h2>
             <p style={{ fontSize: '16px', color: '#555' }}>
-                당신이 해당 메시지의 <span style = {{color: '#B60000', fontWeight: 'bold'}}>수신자</span>라고 가정해 주세요.
+                당신이 해당 메시지의 <span style = {{backgroundColor: '#ffe066', color: '#B60000', fontWeight: 'bold'}}>수신자</span>라고 가정해 주세요.
                 <br /><br />
                 상대방이 <b>제시된 텍스트에 적절한 GIF를 직접 선택해 함께 전송했다고 가정했을 때</b>,<br />
-                <span style = {{color: '#B60000', fontWeight: 'bold'}}>수신자 입장</span>에서 해당 GIF에서 느껴지는 감정의 특성을 세 가지 기준에 따라 평가해 주세요:
+                <span style = {{backgroundColor: '#ffe066', color: '#B60000', fontWeight: 'bold'}}>수신자 입장</span>에서 해당 GIF에서 느껴지는 감정의 특성을 세 가지 기준에 따라 평가해 주세요:
                 <br /><br /><br />
                 <span style = {{color: '#B60000', fontWeight: 'bold'}}>** 텍스트와 GIF의 조합은 이미 상황에 적절하다고 전제되어 있으므로, 텍스트/GIF간의 어울림 여부는 평가 대상이 아닙니다</span>
             </p>
@@ -140,26 +169,36 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
                                 { img: pair[rightRole], alt: `recv_${id}_${rightRole}`, label: `상대(${rightRole})` }
                             ].map(({ img, alt, label }) => (
                                 <div key={alt} style={{ flex: 1, background: "#fafafa", borderRadius: "10px", boxShadow: "0 2px 8px #eee", padding: "10px", margin: "0 10px" }}>
-                                    <div style={{ fontWeight: 600, marginBottom: '8px', textAlign: 'left' }}>
-                                        Message: {text}
-                                        <span style={{ color: '#888', marginLeft: 8, fontWeight: 400 }}>(Set: {_set})</span>
+                                    <div key={alt} style={{ flex: 1, padding: "0 10px" }}>
+                                        {/* 상단 작은 라벨 (이름 톤) */}
+                                        <div style={nameLabel}>
+                                            &nbsp;&nbsp;상대방의 메시지
+                                            <span style={{ color: '#9aa0a6', marginLeft: 8 }}>(Set: {_set})</span>
+                                        </div>
+
+                                        {/* iOS 말풍선: 텍스트 위, GIF 아래 (원본 크기 유지) */}
+                                        <div style={chatRow}>
+                                            <div style={iosBubble}>
+                                            <div style={iosTail} />
+                                            <div>{text}</div>
+                                        </div>
                                     </div>
-                                    <div style={{ display: "flex", justifyContent: "center" }}>
                                         <img
                                             src={img}
                                             alt={alt}
-                                            style={{ maxWidth: "100%", borderRadius: "8px", boxShadow: "0 2px 8px #ccc", marginBottom: "20px" }}
-                                            onContextMenu={e => e.preventDefault()}
-                                            onDragStart={e => e.preventDefault()}
-                                        />
-                                    </div>
+                                            // 원본(자연) 크기 유지: width 미지정, 필요시 넘치지 않게만 막고 싶으면 maxWidth: "100%" 추가
+                                            style={{ display: "block", height: "auto", borderRadius: 12, maxWidth: 'min(100%, 360px)' }}
+                                            onContextMenu={(e) => e.preventDefault()}
+                                            onDragStart={(e) => e.preventDefault()}
+                                        />                                    
+                                </div>
                                     {[
                                         {
                                             key: `${alt}_valence`,
                                             image: valenceImage,
                                             question: [
-                                                "1. 해당 gif가 표현하는 valence에 대해서 평가해주세요",
-                                                "* 느껴지는 감정이 얼마나 유쾌한지 불쾌한지",
+                                                <> 1. 해당 메시지가 전달하는 <span style = {{color: '#2F4B8F', fontWeight: 'bold'}}>상대방의 감정</span>은 <strong>‘매우 부정적’↔‘매우 긍정적’</strong><br/> 
+                                                사이에서 어디에 가깝습니까?</>
                                             ],
                                             options: [1, 2, 3, 4, 5, 6, 7],
                                             labels: ["매우 불쾌함", "매우 유쾌함"],
@@ -168,15 +207,15 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
                                             key: `${alt}_arousal`,
                                             image: arousalImage,
                                             question: [
-                                                "2. 해당 gif가 표현하는 arousal에 대해서 평가해주세요",
-                                                "*  느껴지는 감정이 얼마나 차분한지, 혹은 얼마나 강렬하고 활발한지",
+                                                <> 2. 해당 메시지가 전달하는 <span style = {{color: '#2F4B8F', fontWeight: 'bold'}}>상대방의 감정 각성 수준</span>은 <br/> 
+                                                <strong>‘매우 차분함’↔‘매우 격앙됨’</strong> 사이에서 어디에 가깝습니까?</>
                                             ],
                                             options: [1, 2, 3, 4, 5, 6, 7],
                                             labels: ["매우 차분함", "매우 들뜸"],
                                         },
                                         {
                                             key: `${alt}_expression`,
-                                            question: "3. 해당 gif가 당신의 감정을 잘 표현했다고 생각하십니까?",
+                                            question: <> 3. 해당 메시지가 <span style = {{color: '#2F4B8F', fontWeight: 'bold'}}>상대방의 실제 감정</span>을 <b>더 풍부하게 표현한다고</b> 생각하십니까?</>,
                                             options: [1, 2, 3, 4, 5, 6, 7],
                                             labels: ["전혀 그렇지 않다", "매우 그렇다"],
                                         },
@@ -250,7 +289,7 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
 
             <div style={{ margin: "30px 0", padding: "20px", background: "#f5f5f5", borderRadius: "8px" }}>
             <label style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "10px", display: "block" }}>
-                위의 <strong>합성된 GIF들</strong>이 전반적으로 <strong>당신의 얼굴</strong>처럼 보인다고 느끼십니까?
+                위의 <strong>합성된 GIF들</strong>이 전반적으로 <strong>당신의 얼굴</strong>로 인지된다고 느끼십니까?
             </label>
             <p style={{ color: "#666", margin: "6px 0 14px" }}>
                 1 = 전혀 그렇지 않다 &nbsp;~&nbsp; 7 = 매우 그렇다
