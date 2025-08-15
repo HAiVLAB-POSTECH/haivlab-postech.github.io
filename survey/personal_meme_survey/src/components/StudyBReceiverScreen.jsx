@@ -95,15 +95,15 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
                 gif 감정평가 설문지 (2/3)
             </h2>
             <h2 style={{ textAlign: 'left', color: '#333', paddingBottom: '0px' }}>
-                수신자 역할 gif 감정 평가
+                <span style={{ backgroundColor: '#ffe066'}}>수신자 역할</span> gif 감정 평가
             </h2>
             <p style={{ fontSize: '16px', color: '#555' }}>
-                당신이 해당 메시지의 수신자라고 가정해 주세요.
+                당신이 해당 메시지의 <span style = {{color: '#B60000', fontWeight: 'bold'}}>수신자</span>라고 가정해 주세요.
                 <br /><br />
-                상대방이 제시된 텍스트에 적절한 GIF를 직접 선택해 함께 전송했다고 가정했을 때,<br />
-                수신자 입장에서 해당 GIF에서 느껴지는 감정의 특성을 세 가지 기준에 따라 평가해 주세요:
+                상대방이 <b>제시된 텍스트에 적절한 GIF를 직접 선택해 함께 전송했다고 가정했을 때</b>,<br />
+                <span style = {{color: '#B60000', fontWeight: 'bold'}}>수신자 입장</span>에서 해당 GIF에서 느껴지는 감정의 특성을 세 가지 기준에 따라 평가해 주세요:
                 <br /><br /><br />
-                ** 텍스트와 GIF의 조합은 이미 상황에 적절하다고 전제되어 있으므로, 텍스트/GIF간의 어울림 여부는 평가 대상이 아닙니다
+                <span style = {{color: '#B60000', fontWeight: 'bold'}}>** 텍스트와 GIF의 조합은 이미 상황에 적절하다고 전제되어 있으므로, 텍스트/GIF간의 어울림 여부는 평가 대상이 아닙니다</span>
             </p>
 
             <div>
