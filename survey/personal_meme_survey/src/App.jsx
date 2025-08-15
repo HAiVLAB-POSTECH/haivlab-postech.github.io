@@ -19,6 +19,7 @@ function App() {
 
   // 테스트 B 감정 평가 데이터
   const [emotionData, setEmotionData] = useState(null);
+  const [isReal, setIsReal] = useState(null);
 
   // 참여자 정보
   const [userId, setUserId] = useState('');
@@ -30,7 +31,7 @@ function App() {
 
   // 구글 Apps Script URL
   const WEB_APP_URL =
-    'https://script.google.com/macros/s/AKfycbwBMYmbu39lvkhgB1kQY_teKuYWNeaVx90i7HU28eia-jviyv3AhGTcDLuPyS-HEjpV_g/exec';
+    'https://script.google.com/macros/s/AKfycbweYJ94Nyx7asGyWJZ-G9Mp5KLYASAIoG5FmPYqW0Rcl4R6fFi-f7030-WX-tCTWijv/exec';
 
   // 화면 전환
   const startTestA = () => {
@@ -189,6 +190,7 @@ function App() {
     console.log('knownPeriod:', knownPeriod);
     console.log('freeChatData:', freeChatData);
     console.log('emotionData:', emotionData);
+    console.log('isReal:', isReal);
 
     formBody.append('userId', userId);
     formBody.append('gender', gender);
@@ -196,6 +198,7 @@ function App() {
     formBody.append('knownPeriod', knownPeriod);
     formBody.append('freeChatData', JSON.stringify(freeChatData));
     formBody.append('emotionData', JSON.stringify(emotionData));
+    formBody.append('isReal', isReal);
 
     try {
       const response = await fetch(WEB_APP_URL, {
@@ -276,6 +279,8 @@ function App() {
           onNext={changeScreen}
           emotionData={emotionData}
           setEmotionData={setEmotionData}
+          isRealData={isReal}
+          setIsReal={setIsReal}
           items={studyBItems}
           userId={userId}
         />
@@ -286,6 +291,8 @@ function App() {
           onNext={changeScreen}
           emotionData={emotionData}
           setEmotionData={setEmotionData}
+          isRealData={isReal}
+          setIsReal={setIsReal}
           items={studyBItems}
           userId={userId}
         />

@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import valenceImage from '/src/assets/images/valence_survey.png';
 import arousalImage from '/src/assets/images/arousal_survey.png';
 
-function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [], userId }) {
+function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [], userId, isReal, setIsReal }) {
 
     // formData keys are dynamic, based on images/questions from server
     const [formData, setFormData] = useState({});
@@ -305,7 +305,7 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [], u
             </div>
             <div style={{ margin: "30px 0", padding: "20px", background: "#f5f5f5", borderRadius: "8px" }}>
                 <label style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "10px", display: "block" }}>
-                    위의 <strong>합성된 GIF들</strong>이 전반적으로 <strong>당신의 얼굴</strong>처럼 보인다고 느끼십니까?
+                    위의 <strong>합성된 GIF들</strong>이 전반적으로 <strong>자신의 얼굴</strong>로 인지된다고 느끼십니까?
                 </label>
                 {/* The descriptive paragraph is no longer needed, as labels are below the scale */}
                 
@@ -354,7 +354,10 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [], u
                                             name={key} // Ensure 'key' is defined in the parent scope
                                             value={option.toString()}
                                             checked={formData[key] === option.toString()}
-                                            onChange={handleChange}
+                                            onChange={(e) => {
+                                                handleChange(e);             
+                                                setIsReal(e.target.value); 
+                                            }}
                                             style={{ margin: "4px 0" }}
                                         />
 

@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import valenceImage from '/src/assets/images/valence_survey.png';
 import arousalImage from '/src/assets/images/arousal_survey.png';
 
-function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [], userId }) {
+function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [], userId, isReal, setIsReal }) {
 
     // formData keys are dynamic, based on images/questions from server
     const [formData, setFormData] = useState({});
@@ -350,7 +350,10 @@ function StudyBReceiverScreen({ onNext, emotionData, setEmotionData, items = [],
                                         name={key}
                                         value={option.toString()}
                                         checked={formData[key] === option.toString()}
-                                        onChange={handleChange}
+                                        onChange={(e) => {
+                                            handleChange(e);             
+                                            setIsReal(e.target.value); 
+                                        }}
                                         style={{ margin: "4px 0" }}
                                     />
 
