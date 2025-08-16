@@ -61,25 +61,37 @@ function App() {
         { place: '파리', variant: 'orig' },
       ];
     }
-    const mod = ((id - 1) % 4) + 1; // 1..4 반복
+
+    // 1. userId를 기반으로 '쌍(pair)'의 고유 ID를 계산합니다.
+    // (1,2) -> 0, (3,4) -> 1, ... , (31,32) -> 15
+    const pairId = Math.floor((id - 1) / 2);
+
+    // 2. pairId를 4로 나눈 나머지(0, 1, 2, 3)를 통해 케이스를 할당합니다.
+    // 이렇게 하면 16쌍이 4개의 케이스에 4쌍씩 공평하게 분배됩니다.
+    const mod = pairId % 4;
+
     switch (mod) {
-      case 1: // 뉴욕(얼굴합성) -> 파리(원본)
+      case 0: // pairId가 0, 4, 8, 12인 쌍 (총 4쌍)
+        // case1: 뉴욕(얼굴합성) -> 파리(원본)
         return [
           { place: '뉴욕', variant: 'swap' },
           { place: '파리', variant: 'orig' },
         ];
-      case 2: // 뉴욕(원본) -> 파리(얼굴합성)
+      case 1: // pairId가 1, 5, 9, 13인 쌍 (총 4쌍)
+        // case2: 뉴욕(원본) -> 파리(얼굴합성)
         return [
           { place: '뉴욕', variant: 'orig' },
           { place: '파리', variant: 'swap' },
         ];
-      case 3: // 파리(얼굴합성) -> 뉴욕(원본)
+      case 2: // pairId가 2, 6, 10, 14인 쌍 (총 4쌍)
+        // case3: 파리(얼굴합성) -> 뉴욕(원본)
         return [
           { place: '파리', variant: 'swap' },
           { place: '뉴욕', variant: 'orig' },
         ];
-      case 4: // 파리(원본) -> 뉴욕(얼굴합성)
+      case 3: // pairId가 3, 7, 11, 15인 쌍 (총 4쌍)
       default:
+        // case4: 파리(원본) -> 뉴욕(얼굴합성)
         return [
           { place: '파리', variant: 'orig' },
           { place: '뉴욕', variant: 'swap' },
