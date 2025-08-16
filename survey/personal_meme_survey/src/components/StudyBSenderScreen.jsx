@@ -198,7 +198,7 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [], u
                                                 사이에서 어디에 가깝습니까?</>
                                             ],
                                             options: [1, 2, 3, 4, 5, 6, 7],
-                                            labels: ["매우 불쾌함", "매우 유쾌함"],
+                                            labels: ["매우 부정적", "매우 긍정적"],
                                         },
                                         {
                                             key: `${alt}_arousal`,
@@ -208,7 +208,7 @@ function StudyBSenderScreen({ onNext, emotionData, setEmotionData, items = [], u
                                                 <strong>‘매우 차분함’↔‘매우 격앙됨’</strong> 사이에서 어디에 가깝습니까?</>
                                             ],
                                             options: [1, 2, 3, 4, 5, 6, 7],
-                                            labels: ["매우 차분함", "매우 들뜸"],
+                                            labels: ["매우 차분함", "매우 격앙됨"],
                                         },
                                         {
                                             key: `${alt}_expression`,
