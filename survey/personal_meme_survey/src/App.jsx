@@ -213,6 +213,7 @@ function App() {
     formBody.append('freeChatData', JSON.stringify(freeChatData));
     formBody.append('emotionData', JSON.stringify(emotionData));
     formBody.append('isMyFace', isMyFace);
+    formBody.append('isYourFace', isYourFace);
 
     try {
       const response = await fetch(WEB_APP_URL, {
