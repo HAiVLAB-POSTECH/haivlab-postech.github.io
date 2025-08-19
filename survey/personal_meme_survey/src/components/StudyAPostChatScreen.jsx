@@ -73,43 +73,43 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place, va
             {/* Questions - A */}
             {[
                 {
-                    key: `post_a1_${place}`,
+                    key: `${variant}_post_a1_${place}`,
                     question: "1. 나는 대화 내내 상대방이 바로 곁에 있는 듯 느꼈다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: `post_a2_${place}`,
+                    key: `${variant}_post_a2_${place}`,
                     question: "2. 과제를 수행하는 동안 상대와 생각이 잘 통했다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: `post_a3_${place}`,
+                    key: `${variant}_post_a3_${place}`,
                     question: "3. 내 개인적인 생각이나 감정을 드러내는 데 부담이 적었다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: `post_a4_${place}`,
+                    key: `${variant}_post_a4_${place}`,
                     question: "4. 이번 대화에서 나는 나 자신에 대한 친밀하고 개인적인 정보를 자주 밝혔다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: `post_a5_${place}`,
+                    key: `${variant}_post_a5_${place}`,
                     question: "5. 이번 대화에서 상대방은 자기 자신에 대해 친밀하고 개인적인 정보를 자주 밝혔다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: `post_a6_${place}`,
+                    key: `${variant}_post_a6_${place}`,
                     question: "6. 나는 이 매체를 통해 내가 보여주고 싶은 모습을 원하는 대로 선택할 수 있었다",
                     options: [1, 2, 3, 4, 5, 6, 7],
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: `post_a7_${place}`,
+                    key: `${variant}_post_a7_${place}`,
                     question: [
                         "7. 나는 이 매체를 통해 나를 표현하는 것이 부담스러웠다",
                     ],
@@ -117,7 +117,7 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place, va
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: `post_a8_${place}`,
+                    key: `${variant}_post_a8_${place}`,
                     question: [
                         "8. 나는 대화에 깊이 몰입했다",
                     ],
@@ -125,7 +125,7 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place, va
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: `post_a9_${place}`,
+                    key: `${variant}_post_a9_${place}`,
                     question: [
                         "9. 상대방과의 대화는 즐거웠다",
                     ],
@@ -133,7 +133,7 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place, va
                     labels: ["전혀 그렇지 않다", "매우 그렇다"],
                 },
                 {
-                    key: `post_a10_${place}`,
+                    key: `${variant}_post_a10_${place}`,
                     question: [
                         "10. 나는 이번 대화를 통해 상대방과 더 가까워졌다고 느낀다",
                     ],

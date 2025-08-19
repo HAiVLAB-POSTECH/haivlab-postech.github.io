@@ -19,7 +19,8 @@ function App() {
 
   // 테스트 B 감정 평가 데이터
   const [emotionData, setEmotionData] = useState(null);
-  const [isReal, setIsReal] = useState(null);
+  const [isMyFace, setIsMyFace] = useState(null);
+  const [isYourFace, setIsYourFace] = useState(null);
 
   // 참여자 정보
   const [userId, setUserId] = useState('');
@@ -31,7 +32,7 @@ function App() {
 
   // 구글 Apps Script URL
   const WEB_APP_URL =
-    'https://script.google.com/macros/s/AKfycbweYJ94Nyx7asGyWJZ-G9Mp5KLYASAIoG5FmPYqW0Rcl4R6fFi-f7030-WX-tCTWijv/exec';
+    'https://script.google.com/macros/s/AKfycbwV-546bRhOt6GoLjhvquQyka7wd2XiTvIIeMwYRe1F5595Hk579h783zk0ZDzeKdxS/exec';
 
   // 화면 전환
   const startTestA = () => {
@@ -202,7 +203,8 @@ function App() {
     console.log('knownPeriod:', knownPeriod);
     console.log('freeChatData:', freeChatData);
     console.log('emotionData:', emotionData);
-    console.log('isReal:', isReal);
+    console.log('isMyFace:', isMyFace);
+    console.log('isYourFace:', isYourFace);
 
     formBody.append('userId', userId);
     formBody.append('gender', gender);
@@ -210,7 +212,7 @@ function App() {
     formBody.append('knownPeriod', knownPeriod);
     formBody.append('freeChatData', JSON.stringify(freeChatData));
     formBody.append('emotionData', JSON.stringify(emotionData));
-    formBody.append('isReal', isReal);
+    formBody.append('isMyFace', isMyFace);
 
     try {
       const response = await fetch(WEB_APP_URL, {
@@ -291,8 +293,8 @@ function App() {
           onNext={changeScreen}
           emotionData={emotionData}
           setEmotionData={setEmotionData}
-          isRealData={isReal}
-          setIsReal={setIsReal}
+          isYourFace={isYourFace}
+          setIsYourFace={setIsYourFace}
           items={studyBItems}
           userId={userId}
         />
@@ -303,8 +305,8 @@ function App() {
           onNext={changeScreen}
           emotionData={emotionData}
           setEmotionData={setEmotionData}
-          isRealData={isReal}
-          setIsReal={setIsReal}
+          isMyFace={isMyFace}
+          setIsMyFace={setIsMyFace}
           items={studyBItems}
           userId={userId}
         />
