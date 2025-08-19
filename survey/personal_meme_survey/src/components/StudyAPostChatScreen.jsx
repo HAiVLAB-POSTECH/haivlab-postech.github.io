@@ -5,7 +5,7 @@ function StudyAPostChatScreen({ onNext, freeChatData, setFreeChatData, place, va
     const [formData, setFormData] = useState({});
 
     useEffect(() => {
-        const keys = Array.from({ length: 10 }, (_, i) => `post_a${i + 1}_${place}`);
+        const keys = Array.from({ length: 10 }, (_, i) => `${variant}_post_a${i + 1}_${place}`);
         const initialData = keys.reduce((acc, key) => {
             acc[key] = "";
             return acc;
